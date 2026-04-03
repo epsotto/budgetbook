@@ -3,7 +3,8 @@ import { pgTable, text, timestamp, boolean, index, uuid } from 'drizzle-orm/pg-c
 
 export const user = pgTable('user', {
 	id: uuid('id').primaryKey(),
-	name: text('name').notNull(),
+	firstName: text('first_name').notNull(),
+	lastName: text('last_name').notNull(),
 	email: text('email').notNull().unique(),
 	emailVerified: boolean('email_verified').default(false).notNull(),
 	image: text('image'),
