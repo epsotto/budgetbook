@@ -16,7 +16,7 @@
 		{@render children()}
 	</main>
 	<footer class="items-right flex justify-between bg-surface-container-low px-8 py-12">
-		<p class="text-xs text-muted-foreground uppercase">© 2024 BudgetBook Financial Architecture</p>
+		<p class="text-xs text-muted-foreground uppercase">© 2026 BudgetBook Ltd</p>
 		<nav class="flex items-center gap-4">
 			<a class="text-sm uppercase" href="/privacy-policy">Privacy Policy</a>
 			<a class="text-sm uppercase" href="/terms-of-service">Terms of Service</a>

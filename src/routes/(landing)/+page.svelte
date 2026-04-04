@@ -1,6 +1,6 @@
 <section class="box box-shadow flex items-center justify-center">
 	<div
-		class="m-10 flex max-w-md flex-col gap-4 rounded-[1.5em] bg-surface-container-lowest px-16 py-8 lg:p-16"
+		class="m-10 flex max-w-md animate-in flex-col gap-4 rounded-[1.5em] bg-surface-container-lowest px-16 py-8 duration-500 slide-in-from-bottom-5 fade-in lg:p-16"
 	>
 		<h1
 			class="text-[2.5em] leading-[1.05] font-bold tracking-[-0.04em] text-foreground lg:text-[3.5em]"
@@ -12,13 +12,13 @@
 		</p>
 		<div class="flex flex-col gap-3">
 			<a
-				class="text-md flex items-center justify-center gap-3 rounded-md bg-primary px-8 py-3 font-medium text-primary-foreground transition-all hover:opacity-90 active:scale-95"
-				href="/login">Get Started</a
+				class="font-large flex items-center justify-center gap-3 rounded-md bg-primary px-8 py-3 text-lg text-primary-foreground transition-all hover:opacity-80 active:scale-95"
+				href="/login">Login</a
 			>
 		</div>
 		<div class="flex flex-col gap-3">
 			<a
-				class="text-md flex items-center justify-center gap-3 rounded-md bg-muted px-8 py-3 font-medium text-foreground transition-all hover:text-accent-foreground active:scale-95"
+				class="font-large flex items-center justify-center gap-3 rounded-md bg-muted px-8 py-3 text-lg text-foreground transition-all hover:text-accent-foreground hover:opacity-80 active:scale-95"
 				href="/signup">Sign Up</a
 			>
 		</div>
