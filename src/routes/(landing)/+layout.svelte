@@ -3,7 +3,7 @@
 </script>
 
 <div class="flex min-h-screen flex-col bg-background">
-	<header class="surface-container-high flex items-center justify-between px-8 py-8">
+	<header class="flex items-center justify-between bg-surface-container-lowest px-8 py-8">
 		<h1 class="text-lg font-bold">BudgetBook</h1>
 		<nav class="flex items-center gap-4">
 			<a class="text-sm uppercase" href="/features">Features</a>
@@ -15,7 +15,7 @@
 	<main class="surface-container-low primary-background flex-1">
 		{@render children()}
 	</main>
-	<footer class="items-right surface-container-lowest flex justify-between px-8 py-12">
+	<footer class="items-right flex justify-between bg-surface-container-low px-8 py-12">
 		<p class="text-xs text-muted-foreground uppercase">© 2024 BudgetBook Financial Architecture</p>
 		<nav class="flex items-center gap-4">
 			<a class="text-sm uppercase" href="/privacy-policy">Privacy Policy</a>
