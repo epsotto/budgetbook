@@ -18,7 +18,7 @@
 			Enter your credentials to start using Budgetbook
 		</p>
 
-		<form class="flex flex-col gap-8" method="post" action="/login" use:enhance>
+		<form class="flex flex-col gap-8" method="post" action="?/login" use:enhance>
 			<label class="font-small semibold text-sm tracking-[0.05em] text-muted-foreground uppercase">
 				Email
 				<input
@@ -39,6 +39,9 @@
 				>Login</button
 			>
 		</form>
-		<p class="text-red-500">{form?.message ?? ''}</p>
+		<p class="py-4 text-center text-destructive">{form?.message ?? ''}</p>
+		<p class="mt-4 text-center">
+			Don't have an account? <a class="text-primary" href="/signup">Sign up</a>
+		</p>
 	</div>
 </section>
