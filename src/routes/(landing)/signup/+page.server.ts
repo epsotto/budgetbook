@@ -12,18 +12,31 @@ export const load: PageServerLoad = async (event) => {
 };
 
 export const actions: Actions = {
-	signUpEmail: async (event) => {
+	signup: async (event) => {
 		const formData = await event.request.formData();
 		const email = formData.get('email')?.toString() ?? '';
+		const retypeEmail = formData.get('retypeEmail')?.toString() ?? '';
 		const password = formData.get('password')?.toString() ?? '';
-		const name = formData.get('name')?.toString() ?? '';
+		const confirmPassword = formData.get('confirmPassword')?.toString() ?? '';
+		const firstName = formData.get('firstName')?.toString() ?? '';
+		const lastName = formData.get('lastName')?.toString() ?? '';
+
+		if (email !== retypeEmail) {
+			return fail(400, { message: 'Emails do not match' });
+		}
+
+		if (password !== confirmPassword) {
+			return fail(400, { message: 'Passwords do not match' });
+		}
 
 		try {
 			await auth.api.signUpEmail({
 				body: {
 					email,
 					password,
-					name,
+					name: `${firstName} ${lastName}`,
+					firstName,
+					lastName,
 					callbackURL: '/auth/verification-success'
 				}
 			});
