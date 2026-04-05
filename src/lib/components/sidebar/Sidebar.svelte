@@ -2,6 +2,7 @@
 	import SidebarBookList from './SidebarBookList.svelte';
 	import SidebarSettingsLink from './SidebarSettingsLink.svelte';
 	import SidebarSharedList from './SidebarSharedList.svelte';
+	import SidebarSignout from './SidebarSignout.svelte';
 	import SidebarUserAvatar from './SidebarUserAvatar.svelte';
 </script>
 
@@ -12,5 +13,6 @@
 	<div class="mt-auto">
 		<SidebarSettingsLink></SidebarSettingsLink>
 		<SidebarUserAvatar></SidebarUserAvatar>
+		<SidebarSignout></SidebarSignout>
 	</div>
 </div>
