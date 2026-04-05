@@ -4,12 +4,12 @@ import type { PageServerLoad } from './$types';
 import { auth } from '$lib/server/auth';
 import { APIError } from 'better-auth/api';
 
-// export const load: PageServerLoad = async (event) => {
-// 	if (event.locals.user) {
-// 		return redirect(302, '/');
-// 	}
-// 	return {};
-// };
+export const load: PageServerLoad = async (event) => {
+	if (event.locals.user) {
+		return redirect(302, '/dashboard');
+	}
+	return {};
+};
 
 export const actions: Actions = {
 	login: async (event) => {
@@ -32,6 +32,6 @@ export const actions: Actions = {
 			return fail(500, { message: 'Unexpected error' });
 		}
 
-		return redirect(302, '/');
+		return redirect(302, '/dashboard');
 	}
 };
