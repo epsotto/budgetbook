@@ -9,37 +9,37 @@
 > Most of `auth.ts` and `hooks.server.ts` are already wired up. These are the remaining one-time setup steps.
 
 ### Environment variables
-- [ ] Create `.env` (gitignored) with:
+- [x] Create `.env` (gitignored) with:
   - `DATABASE_URL` — Postgres connection string matching `compose.yaml`
   - `BETTER_AUTH_SECRET` — random secret (e.g. `openssl rand -hex 32`)
   - `ORIGIN` — e.g. `http://localhost:5173` for local dev
 
 ### Auth schema generation
-- [ ] Run `npm run auth:schema` to generate Better Auth tables into `src/lib/server/db/auth.schema.ts` (currently still a placeholder)
-- [ ] Re-export `auth.schema.ts` from `src/lib/server/db/schema.ts` (already has `export * from './auth.schema'` — verify it resolves after generation)
-- [ ] Run `npm run db:push` to apply the generated auth tables (`user`, `session`, `account`, `verification`) to Postgres
+- [x] Run `npm run auth:schema` to generate Better Auth tables into `src/lib/server/db/auth.schema.ts` (currently still a placeholder)
+- [x] Re-export `auth.schema.ts` from `src/lib/server/db/schema.ts` (already has `export * from './auth.schema'` — verify it resolves after generation)
+- [x] Run `npm run db:push` to apply the generated auth tables (`user`, `session`, `account`, `verification`) to Postgres
 
 ### Optional auth providers
 - [ ] To add Google OAuth: install `@better-auth/oauth-providers`, add `socialProviders: { google: { ... } }` to `auth.ts`, add `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET` to `.env`
 
 ### Verify
-- [ ] Start the app (`npm run dev`) and confirm `/api/auth/sign-in/email` responds
-- [ ] Log in via the existing demo login page and confirm `event.locals.user` / `event.locals.session` are populated
+- [x] Start the app (`npm run dev`) and confirm `/api/auth/sign-in/email` responds
+- [x] Log in via the existing demo login page and confirm `event.locals.user` / `event.locals.session` are populated
 
 ---
 
 ## Milestone 1 — Database Schema & Migrations
 
-- [ ] Replace placeholder `task` table in `src/lib/server/db/schema.ts` with the full app schema
-- [ ] Define `budgetBook` table — `id`, `name`, `ownerId`, `createdAt`, `updatedAt`
-- [ ] Define `budgetBookMember` table — `bookId`, `userId`, `role` (`owner | editor | viewer`)
-- [ ] Define `category` table — `id`, `bookId`, `name`, `icon`, `budgetAmount` (monthly ceiling), `sortOrder`
-- [ ] Define `item` table — `id`, `categoryId`, `name`, `sortOrder`, `createdBy` (userId), `createdAt`, `updatedBy` (userId), `updatedAt`
-- [ ] Define `transaction` table — `id`, `itemId`, `amount`, `date`, `note`, `createdBy` (userId), `createdAt`, `updatedBy` (userId), `updatedAt`
-- [ ] Add foreign key relations and indexes (bookId, categoryId, itemId, date, createdBy)
-- [ ] `createdBy` / `updatedBy` on `item` and `transaction` reference the auth `user` table, enabling per-user attribution in shared books
-- [ ] Run `npm run db:push` to apply schema to local Postgres
-- [ ] Verify schema with `npm run db:studio`
+- [x] Replace placeholder `task` table in `src/lib/server/db/schema.ts` with the full app schema
+- [x] Define `budgetBook` table — `id`, `name`, `ownerId`, `createdAt`, `updatedAt`
+- [x] Define `budgetBookMember` table — `bookId`, `userId`, `role` (`owner | editor | viewer`)
+- [x] Define `category` table — `id`, `bookId`, `name`, `icon`, `budgetAmount` (monthly ceiling), `sortOrder`
+- [x] Define `item` table — `id`, `categoryId`, `name`, `sortOrder`, `createdBy` (userId), `createdAt`, `updatedBy` (userId), `updatedAt`
+- [x] Define `transaction` table — `id`, `itemId`, `amount`, `date`, `note`, `createdBy` (userId), `createdAt`, `updatedBy` (userId), `updatedAt`
+- [x] Add foreign key relations and indexes (bookId, categoryId, itemId, date, createdBy)
+- [x] `createdBy` / `updatedBy` on `item` and `transaction` reference the auth `user` table, enabling per-user attribution in shared books
+- [x] Run `npm run db:push` to apply schema to local Postgres
+- [x] Verify schema with `npm run db:studio`
 
 ---
 
@@ -47,19 +47,19 @@
 
 ### Route groups
 
-- [ ] Create `src/routes/(auth)/` group directory
-- [ ] Move existing `demo/better-auth/login/` pages into `src/routes/(auth)/login/`
-- [ ] Create `src/routes/(app)/` group directory
+- [x] Create `src/routes/(auth)/` group directory
+- [x] Move existing `demo/better-auth/login/` pages into `src/routes/(auth)/login/`
+- [x] Create `src/routes/(app)/` group directory
 
 ### Auth guard
 
-- [ ] Create `src/routes/(app)/+layout.server.ts` — redirect to `/login` if no session
-- [ ] Create `src/routes/(app)/+layout.svelte` — renders Sidebar + `<slot />`
+- [x] Create `src/routes/(app)/+layout.server.ts` — redirect to `/login` if no session
+- [x] Create `src/routes/(app)/+layout.svelte` — renders Sidebar + `<slot />`
 
 ### Root cleanup
 
-- [ ] Remove `/demo` routes once login is migrated
-- [ ] Update root `+layout.svelte` if needed (fonts, global CSS resets)
+- [x] Remove `/demo` routes once login is migrated
+- [x] Update root `+layout.svelte` if needed (fonts, global CSS resets)
 
 ---
 
@@ -69,11 +69,11 @@
 
 ### Components (`src/lib/components/sidebar/`)
 
-- [ ] `Sidebar.svelte` — fixed left panel, dark background, full height
-- [ ] `SidebarBookList.svelte` — "MY BUDGET BOOKS" section heading + list of book links; active book highlighted
-- [ ] `SidebarSharedList.svelte` — "SHARED WITH ME" section heading + list
-- [ ] `SidebarSettingsLink.svelte` — settings icon + label, links to `/settings`
-- [ ] `SidebarUserAvatar.svelte` — bottom of sidebar, shows avatar + name, logout button
+- [x] `Sidebar.svelte` — fixed left panel, dark background, full height
+- [x] `SidebarBookList.svelte` — "MY BUDGET BOOKS" section heading + list of book links; active book highlighted
+- [x] `SidebarSharedList.svelte` — "SHARED WITH ME" section heading + list
+- [x] `SidebarSettingsLink.svelte` — settings icon + label, links to `/settings`
+- [x] `SidebarUserAvatar.svelte` — bottom of sidebar, shows avatar + name, logout button
 
 ### Wiring
 
