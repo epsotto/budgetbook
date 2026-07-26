@@ -9,20 +9,24 @@
 > Most of `auth.ts` and `hooks.server.ts` are already wired up. These are the remaining one-time setup steps.
 
 ### Environment variables
+
 - [x] Create `.env` (gitignored) with:
   - `DATABASE_URL` — Postgres connection string matching `compose.yaml`
   - `BETTER_AUTH_SECRET` — random secret (e.g. `openssl rand -hex 32`)
   - `ORIGIN` — e.g. `http://localhost:5173` for local dev
 
 ### Auth schema generation
+
 - [x] Run `npm run auth:schema` to generate Better Auth tables into `src/lib/server/db/auth.schema.ts` (currently still a placeholder)
 - [x] Re-export `auth.schema.ts` from `src/lib/server/db/schema.ts` (already has `export * from './auth.schema'` — verify it resolves after generation)
 - [x] Run `npm run db:push` to apply the generated auth tables (`user`, `session`, `account`, `verification`) to Postgres
 
 ### Optional auth providers
+
 - [ ] To add Google OAuth: install `@better-auth/oauth-providers`, add `socialProviders: { google: { ... } }` to `auth.ts`, add `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET` to `.env`
 
 ### Verify
+
 - [x] Start the app (`npm run dev`) and confirm `/api/auth/sign-in/email` responds
 - [x] Log in via the existing demo login page and confirm `event.locals.user` / `event.locals.session` are populated
 
@@ -174,12 +178,29 @@
 
 ## Milestone 7 — Settings Page
 
-- [ ] Create `src/routes/(app)/settings/+page.server.ts` — load user profile
-- [ ] Create `src/routes/(app)/settings/+page.svelte`
-  - [ ] Display name / email fields with update form action
-  - [ ] Change password section
-  - [ ] Delete account (with confirmation)
-  - [ ] Budget book management: rename, delete, change member roles
+### Database & Schema Setup
+
+- [ ] Define `userSetting` table in `src/lib/server/db/schema.ts` — `id`, `userId`, `key`, `value`, `updatedAt`
+- [ ] Run `npm run db:push` to apply the settings schema changes
+
+### Server-Side Implementation
+
+- [ ] Create `src/routes/(app)/settings/+page.server.ts`
+  - [ ] Load user settings config, user profile, books, categories, and establishments/items
+  - [ ] Implement `updateSettingsConfig` form action to save user preferences in `userSetting`
+  - [ ] Implement category management form actions (create, update budget/icon, delete)
+  - [ ] Implement establishment/provider management form actions (create, edit name, change assigned category)
+  - [ ] Implement account actions: update name/contact info, change password, delete account
+- [ ] Implement `deleteAccount` action with cascading deletion across auth and database tables
+
+### User Interface Layout (`src/routes/(app)/settings/+page.svelte`)
+
+- [ ] Build multi-tab settings navigation (General Settings, Categories, Establishments, Account, Books)
+- [ ] **General Settings Tab**: UI to manage application settings config (theme, default currency, etc.)
+- [ ] **Categories Tab**: Edit expense category names, monthly budget ceilings, and Lucide icons
+- [ ] **Establishments/Providers Tab**: Manage known establishments/providers and assign/select which category they map to (e.g. power, internet, groceries)
+- [ ] **Account Tab**: Edit name, password, and contact info (email); include a destructive "Delete Account" action with a confirmation dialog
+- [ ] **Budget Book Management**: Rename, delete, and manage roles for budget books (owner/editor/viewer)
 
 ---
 
