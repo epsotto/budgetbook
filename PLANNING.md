@@ -64,11 +64,11 @@ src/routes/
 
 ```ts
 // src/lib/server/db/schema.ts
-budgetBook        // id, name, ownerId
-budgetBookMember  // bookId, userId, role  ← for future collaboration
-category          // id, bookId, name, icon, budgetAmount (per month)
-item              // id, categoryId, name  ← e.g. "Costco", "Maccas"
-transaction       // id, itemId, amount, date, note  ← individual dated entries
+budgetBook; // id, name, ownerId
+budgetBookMember; // bookId, userId, role  ← for future collaboration
+category; // id, bookId, name, icon, budgetAmount (per month)
+item; // id, categoryId, name  ← e.g. "Costco", "Maccas"
+transaction; // id, itemId, amount, date, note  ← individual dated entries
 ```
 
 ### Decimal Parsing Note
@@ -92,7 +92,7 @@ transactions.reduce((sum, t) => sum + parseFloat(t.amount), 0)
 ```ts
 import Decimal from 'decimal.js';
 const total = transactions.reduce((sum, t) => sum.plus(t.amount), new Decimal(0));
-total.toFixed(2) // → "300.00"
+total.toFixed(2); // → "300.00"
 ```
 
 ---

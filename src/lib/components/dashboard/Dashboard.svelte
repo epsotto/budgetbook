@@ -1,7 +1,11 @@
-<script>
+<script lang="ts">
 	import PageHeader from './PageHeader.svelte';
 
-	let { bookName } = $props();
+	let { bookName, view = 'month' } = $props();
+
+	function handleViewChange(newView: string) {
+		view = newView;
+	}
 </script>
 
-<PageHeader {bookName} monthLabel="Month" view="month" onViewChange={() => {}} />
+<PageHeader {bookName} {view} onViewChange={handleViewChange} />

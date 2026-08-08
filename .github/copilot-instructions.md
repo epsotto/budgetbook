@@ -93,16 +93,16 @@ import { redirect } from '@sveltejs/kit';
 import type { LayoutServerLoad } from './$types';
 
 export const load: LayoutServerLoad = async (event) => {
-  if (!event.locals.user) throw redirect(302, '/login');
-  return { user: event.locals.user };
+	if (!event.locals.user) throw redirect(302, '/login');
+	return { user: event.locals.user };
 };
 ```
 
 ### 4. Import alias
 
 ```ts
-import { db } from '@/server/db';          // → src/lib/server/db
-import { cn } from '@/utils';             // → src/lib/utils
+import { db } from '@/server/db'; // → src/lib/server/db
+import { cn } from '@/utils'; // → src/lib/utils
 import { Button } from '@/components/ui/button';
 ```
 
