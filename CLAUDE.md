@@ -91,8 +91,8 @@ import { redirect } from '@sveltejs/kit';
 import type { LayoutServerLoad } from './$types';
 
 export const load: LayoutServerLoad = async (event) => {
-  if (!event.locals.user) throw redirect(302, '/login');
-  return { user: event.locals.user };
+	if (!event.locals.user) throw redirect(302, '/login');
+	return { user: event.locals.user };
 };
 ```
 
@@ -117,7 +117,7 @@ Drizzle returns `decimal` columns as **strings**. Always parse before arithmetic
 ```ts
 // ❌ Bug: "100.00" + "200.00" = "100.00200.00"
 // ✅ Correct:
-transactions.reduce((sum, t) => sum + parseFloat(t.amount), 0)
+transactions.reduce((sum, t) => sum + parseFloat(t.amount), 0);
 ```
 
 ### Import Alias
