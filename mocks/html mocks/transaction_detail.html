@@ -1,0 +1,468 @@
+<!doctype html>
+
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta content="width=device-width, initial-scale=1.0" name="viewport" />
+		<title>BudgetBook Dashboard - Personal 2026</title>
+		<!-- Inter Font Loading -->
+		<link href="https://fonts.googleapis.com" rel="preconnect" />
+		<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap"
+			rel="stylesheet"
+		/>
+		<!-- Tailwind CSS CDN -->
+		<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+		<script>
+			tailwind.config = {
+				theme: {
+					extend: {
+						colors: {
+							brand: '#0d6cf2'
+						},
+						fontFamily: {
+							sans: ['Inter', 'sans-serif']
+						},
+						borderRadius: {
+							custom: '8px'
+						}
+					}
+				}
+			};
+		</script>
+		<style data-purpose="custom-utilities">
+			body {
+				background-color: #fcfcfd;
+				color: #1a1a1a;
+			}
+			.soft-shadow {
+				box-shadow:
+					0 1px 3px 0 rgba(0, 0, 0, 0.05),
+					0 1px 2px 0 rgba(0, 0, 0, 0.03);
+			}
+			.custom-scrollbar::-webkit-scrollbar {
+				width: 4px;
+			}
+			.custom-scrollbar::-webkit-scrollbar-thumb {
+				background: #e5e7eb;
+				border-radius: 10px;
+			}
+		</style>
+	</head>
+	<body class="font-sans text-slate-900 antialiased">
+		<!-- BEGIN: Root Layout -->
+		<div class="flex h-screen overflow-hidden" data-purpose="dashboard-container">
+			<!-- BEGIN: Sidebar -->
+			<aside
+				class="flex w-64 flex-col border-r border-slate-200 bg-white"
+				data-purpose="sidebar-navigation"
+			>
+				<div class="p-6">
+					<div class="mb-8 flex items-center gap-2">
+						<div
+							class="bg-brand rounded-custom flex h-8 w-8 items-center justify-center text-white"
+						>
+							<svg
+								class="h-5 w-5"
+								fill="none"
+								stroke="currentColor"
+								viewbox="0 0 24 24"
+								xmlns="http://www.w3.org/2000/svg"
+							>
+								<path
+									d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									stroke-width="2"
+								></path>
+							</svg>
+						</div>
+						<span class="text-lg font-bold tracking-tight">BudgetBook</span>
+					</div>
+					<nav class="space-y-6">
+						<section>
+							<h3 class="mb-3 text-xs font-semibold tracking-wider text-slate-400 uppercase">
+								My Budget Books
+							</h3>
+							<ul class="space-y-1">
+								<li>
+									<a
+										class="text-brand rounded-custom flex items-center gap-3 bg-slate-50 px-3 py-2 font-medium transition-colors"
+										href="#"
+									>
+										<span class="bg-brand h-2 w-2 rounded-full"></span>
+										Personal 2026
+									</a>
+								</li>
+								<li>
+									<a
+										class="rounded-custom flex items-center gap-3 px-3 py-2 text-slate-600 transition-colors hover:bg-slate-50"
+										href="#"
+									>
+										<span class="h-2 w-2 rounded-full bg-slate-300"></span>
+										House Reno
+									</a>
+								</li>
+							</ul>
+						</section>
+						<section>
+							<h3 class="mb-3 text-xs font-semibold tracking-wider text-slate-400 uppercase">
+								Shared with Me
+							</h3>
+							<ul class="space-y-1">
+								<li>
+									<a
+										class="rounded-custom flex items-center gap-3 px-3 py-2 text-slate-600 transition-colors hover:bg-slate-50"
+										href="#"
+									>
+										<svg
+											class="h-4 w-4"
+											fill="none"
+											stroke="currentColor"
+											viewbox="0 0 24 24"
+											xmlns="http://www.w3.org/2000/svg"
+										>
+											<path
+												d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
+												stroke-linecap="round"
+												stroke-linejoin="round"
+												stroke-width="2"
+											></path>
+										</svg>
+										Family Expenses
+									</a>
+								</li>
+							</ul>
+						</section>
+					</nav>
+				</div>
+				<div class="mt-auto border-t border-slate-100 p-6">
+					<a
+						class="rounded-custom flex items-center gap-3 px-3 py-2 text-slate-600 transition-colors hover:bg-slate-50"
+						href="#"
+					>
+						<svg
+							class="h-5 w-5"
+							fill="none"
+							stroke="currentColor"
+							viewbox="0 0 24 24"
+							xmlns="http://www.w3.org/2000/svg"
+						>
+							<path
+								d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								stroke-width="2"
+							></path>
+							<path
+								d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								stroke-width="2"
+							></path>
+						</svg>
+						Settings
+					</a>
+				</div>
+			</aside>
+			<!-- END: Sidebar -->
+			<!-- BEGIN: Main Content -->
+			<main class="custom-scrollbar flex-1 overflow-y-auto" data-purpose="main-content-area">
+				<!-- BEGIN: Content Header -->
+				<header
+					class="sticky top-0 z-10 flex items-center justify-between border-b border-slate-200 bg-white/80 px-8 py-4 backdrop-blur-md"
+					data-purpose="header-section"
+				>
+					<div class="flex items-center gap-4">
+						<h1 class="text-xl font-semibold">Personal 2026</h1>
+						<div class="rounded-custom flex items-center gap-1 bg-slate-100 p-1 text-sm">
+							<button class="rounded-custom bg-white px-3 py-1 font-medium shadow-sm">Month</button>
+							<button class="px-3 py-1 text-slate-500 transition-colors hover:text-slate-800">
+								Year
+							</button>
+						</div>
+					</div>
+					<div class="flex items-center gap-3">
+						<div
+							class="rounded-custom flex cursor-pointer items-center gap-2 border border-slate-200 px-3 py-2 text-sm font-medium transition-colors hover:bg-slate-50"
+						>
+							<svg
+								class="h-4 w-4 text-slate-400"
+								fill="none"
+								stroke="currentColor"
+								viewbox="0 0 24 24"
+								xmlns="http://www.w3.org/2000/svg"
+							>
+								<path
+									d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									stroke-width="2"
+								></path>
+							</svg>
+							<span>March 2026</span>
+						</div>
+						<button
+							class="bg-brand rounded-custom flex items-center gap-2 px-4 py-2 text-sm font-medium text-white transition-opacity hover:opacity-90"
+						>
+							<svg
+								class="h-4 w-4"
+								fill="none"
+								stroke="currentColor"
+								viewbox="0 0 24 24"
+								xmlns="http://www.w3.org/2000/svg"
+							>
+								<path
+									d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									stroke-width="2"
+								></path>
+							</svg>
+							Share
+						</button>
+					</div>
+				</header>
+				<!-- END: Content Header -->
+				<!-- BEGIN: Daily Budget List -->
+				<div class="mx-auto max-w-4xl p-8" data-purpose="budget-list-view">
+					<div class="space-y-8">
+						<!-- BEGIN: Food/Grocery Section -->
+						<article
+							class="rounded-custom soft-shadow overflow-hidden border border-slate-200 bg-white"
+							data-purpose="category-food-grocery"
+						>
+							<div class="p-6">
+								<div class="mb-4 flex items-start justify-between">
+									<div class="flex items-center gap-4">
+										<div
+											class="rounded-custom flex h-10 w-10 items-center justify-center bg-orange-100 text-orange-600"
+										>
+											<svg
+												class="h-6 w-6"
+												fill="none"
+												stroke="currentColor"
+												viewbox="0 0 24 24"
+												xmlns="http://www.w3.org/2000/svg"
+											>
+												<path
+													d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
+													stroke-linecap="round"
+													stroke-linejoin="round"
+													stroke-width="2"
+												></path>
+											</svg>
+										</div>
+										<div>
+											<h2 class="text-lg font-semibold">Food/Grocery</h2>
+											<p class="text-sm text-slate-500">Budget: $1,500</p>
+										</div>
+									</div>
+									<div class="text-right">
+										<span class="text-sm font-medium text-slate-700">$450 / $1,500</span>
+									</div>
+								</div>
+								<!-- Progress Bar -->
+								<div class="mb-6 h-2 w-full rounded-full bg-slate-100">
+									<div class="bg-brand h-2 rounded-full" style="width: 30%"></div>
+								</div>
+								<!-- Line Items -->
+								<div class="relative space-y-3">
+									<!-- Costco Item (Expanded State) -->
+									<div
+										class="border-brand/20 rounded-custom flex cursor-pointer items-center justify-between border bg-slate-50 p-3 transition-colors"
+									>
+										<span class="font-medium text-slate-700">Costco</span>
+										<span class="font-semibold text-slate-700">$400.00</span>
+									</div>
+									<!-- Maccas Item -->
+									<div
+										class="rounded-custom flex cursor-pointer items-center justify-between p-3 transition-colors hover:bg-slate-50"
+									>
+										<span class="text-slate-600">Maccas</span>
+										<span class="font-semibold text-slate-700">$50.00</span>
+									</div>
+								</div>
+							</div>
+							<!-- Footer -->
+							<div
+								class="flex items-center justify-between border-t border-slate-200 bg-slate-50/50 px-6 py-4"
+							>
+								<span class="text-sm text-slate-500">Total Spent</span>
+								<span class="text-lg font-bold text-emerald-600">$450.00</span>
+							</div>
+						</article>
+						<!-- END: Food/Grocery Section -->
+						<!-- BEGIN: Fuel/Transpo Section -->
+						<article
+							class="rounded-custom soft-shadow overflow-hidden border border-slate-200 bg-white"
+							data-purpose="category-fuel-transpo"
+						>
+							<div class="p-6">
+								<div class="mb-4 flex items-start justify-between">
+									<div class="flex items-center gap-4">
+										<div
+											class="rounded-custom flex h-10 w-10 items-center justify-center bg-blue-100 text-blue-600"
+										>
+											<svg
+												class="h-6 w-6"
+												fill="none"
+												stroke="currentColor"
+												viewbox="0 0 24 24"
+												xmlns="http://www.w3.org/2000/svg"
+											>
+												<path
+													d="M19 14l-7 7m0 0l-7-7m7 7V3"
+													stroke-linecap="round"
+													stroke-linejoin="round"
+													stroke-width="2"
+												></path>
+											</svg>
+											<svg
+												class="h-5 w-5"
+												fill="none"
+												stroke="currentColor"
+												viewbox="0 0 24 24"
+												xmlns="http://www.w3.org/2000/svg"
+											>
+												<path
+													d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h8a1 1 0 001-1zM13 16l5 2V4l-5 2M13 16V4"
+													stroke-linecap="round"
+													stroke-linejoin="round"
+													stroke-width="2"
+												></path>
+											</svg>
+										</div>
+										<div>
+											<h2 class="text-lg font-semibold">Fuel/Transpo</h2>
+											<p class="text-sm text-slate-500">Budget: $300</p>
+										</div>
+									</div>
+									<div class="text-right">
+										<span class="text-sm font-medium text-slate-700">$210 / $300</span>
+									</div>
+								</div>
+								<!-- Progress Bar -->
+								<div class="mb-6 h-2 w-full rounded-full bg-slate-100">
+									<div class="bg-brand h-2 rounded-full" style="width: 70%"></div>
+								</div>
+								<!-- Line Items -->
+								<div class="space-y-3">
+									<div
+										class="rounded-custom flex cursor-pointer items-center justify-between p-3 transition-colors hover:bg-slate-50"
+									>
+										<span class="text-slate-600">Shell Fuel Station</span>
+										<span class="font-semibold text-slate-700">$85.00</span>
+									</div>
+									<div
+										class="rounded-custom flex cursor-pointer items-center justify-between p-3 transition-colors hover:bg-slate-50"
+									>
+										<span class="text-slate-600">Uber Trip</span>
+										<span class="font-semibold text-slate-700">$125.00</span>
+									</div>
+								</div>
+							</div>
+							<!-- Footer -->
+							<div
+								class="flex items-center justify-between border-t border-slate-200 bg-slate-50/50 px-6 py-4"
+							>
+								<span class="text-sm text-slate-500">Total Spent</span>
+								<span class="text-lg font-bold text-emerald-600">$210.00</span>
+							</div>
+						</article>
+						<!-- END: Fuel/Transpo Section -->
+					</div>
+				</div>
+				<!-- END: Daily Budget List -->
+			</main>
+			<!-- END: Main Content -->
+			<!-- Side Drawer Backdrop -->
+			<div
+				class="fixed inset-0 z-40 bg-slate-900/20 backdrop-blur-sm transition-opacity"
+				data-purpose="modal-backdrop"
+			></div>
+			<!-- Side Drawer Modal -->
+			<aside
+				class="fixed inset-y-0 right-0 z-50 flex w-[450px] transform flex-col border-l border-slate-200 bg-white shadow-2xl transition-transform duration-300 ease-in-out"
+				data-purpose="side-drawer"
+			>
+				<!-- Drawer Header -->
+				<div class="flex items-center justify-between border-b border-slate-100 px-8 py-6">
+					<div>
+						<h2 class="text-xl font-semibold text-slate-900">Costco Transactions</h2>
+						<p class="mt-1 text-sm text-slate-500">Personal 2026 • Food/Grocery</p>
+					</div>
+					<button class="rounded-full p-2 text-slate-400 transition-colors hover:bg-slate-50">
+						<svg class="h-6 w-6" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+							<path
+								d="M6 18L18 6M6 6l12 12"
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								stroke-width="2"
+							></path>
+						</svg>
+					</button>
+				</div>
+				<!-- Drawer Content -->
+				<div class="flex-1 overflow-y-auto p-8">
+					<div class="inline-block min-w-full align-middle">
+						<table class="min-w-full divide-y divide-slate-100">
+							<thead>
+								<tr>
+									<th
+										class="py-3.5 pr-3 pl-0 text-left text-xs font-semibold tracking-wider text-slate-400 uppercase"
+										scope="col"
+									>
+										Date
+									</th>
+									<th
+										class="px-3 py-3.5 text-left text-xs font-semibold tracking-wider text-slate-400 uppercase"
+										scope="col"
+									>
+										Description
+									</th>
+									<th
+										class="py-3.5 pr-0 pl-3 text-right text-xs font-semibold tracking-wider text-slate-400 uppercase"
+										scope="col"
+									>
+										Amount
+									</th>
+								</tr>
+							</thead>
+							<tbody class="divide-y divide-slate-50">
+								<tr>
+									<td class="py-4 pr-3 pl-0 text-sm font-medium whitespace-nowrap text-slate-900">
+										Mar 1, 2026
+									</td>
+									<td class="px-3 py-4 text-sm text-slate-500">Bulk buy for the month</td>
+									<td
+										class="text-brand py-4 pr-0 pl-3 text-right text-sm font-semibold whitespace-nowrap"
+									>
+										$400.00
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<!-- Summary Section -->
+					<div class="mt-8 border-t border-slate-100 pt-8">
+						<div class="flex items-center justify-between text-sm">
+							<span class="text-slate-500">Total for Costco</span>
+							<span class="text-lg font-bold text-slate-900">$400.00</span>
+						</div>
+					</div>
+				</div>
+				<!-- Drawer Footer -->
+				<div class="border-t border-slate-100 bg-slate-50/50 p-8">
+					<button
+						class="rounded-custom w-full border border-slate-200 bg-white py-2.5 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-50"
+					>
+						Add Transaction
+					</button>
+				</div>
+			</aside>
+		</div>
+		<!-- END: Root Layout -->
+	</body>
+</html>
