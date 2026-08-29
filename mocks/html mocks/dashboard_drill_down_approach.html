@@ -1,0 +1,547 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta content="width=device-width, initial-scale=1.0" name="viewport" />
+		<title>BudgetBook Dashboard - Personal 2026</title>
+		<!-- Inter Font Loading -->
+		<link href="https://fonts.googleapis.com" rel="preconnect" />
+		<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap"
+			rel="stylesheet"
+		/>
+		<!-- Tailwind CSS CDN -->
+		<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+		<script>
+			tailwind.config = {
+				theme: {
+					extend: {
+						colors: {
+							brand: '#0d6cf2'
+						},
+						fontFamily: {
+							sans: ['Inter', 'sans-serif']
+						},
+						borderRadius: {
+							custom: '8px'
+						}
+					}
+				}
+			};
+		</script>
+		<style data-purpose="custom-utilities">
+			body {
+				background-color: #f7f9fb; /* Tonal gray background */
+				color: #1a1a1a;
+			}
+			.custom-scrollbar::-webkit-scrollbar {
+				width: 4px;
+			}
+			.custom-scrollbar::-webkit-scrollbar-thumb {
+				background: #e5e7eb;
+				border-radius: 10px;
+			}
+			/* Hide scrollbar for mini quick view */
+			.no-scrollbar::-webkit-scrollbar {
+				display: none;
+			}
+			.no-scrollbar {
+				-ms-overflow-style: none;
+				scrollbar-width: none;
+			}
+		</style>
+	</head>
+	<body class="font-sans text-slate-900 antialiased">
+		<!-- BEGIN: Root Layout -->
+		<div class="flex h-screen overflow-hidden" data-purpose="dashboard-container">
+			<!-- BEGIN: Sidebar -->
+			<aside
+				class="z-20 flex w-64 flex-col bg-white shadow-[1px_0_0_0_rgba(0,0,0,0.05)]"
+				data-purpose="sidebar-navigation"
+			>
+				<div class="p-6">
+					<div class="mb-8 flex items-center gap-2">
+						<div
+							class="bg-brand rounded-custom flex h-8 w-8 items-center justify-center text-white shadow-sm"
+						>
+							<svg
+								class="h-5 w-5"
+								fill="none"
+								stroke="currentColor"
+								viewBox="0 0 24 24"
+								xmlns="http://www.w3.org/2000/svg"
+							>
+								<path
+									d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									stroke-width="2"
+								></path>
+							</svg>
+						</div>
+						<span class="text-lg font-bold tracking-tight">BudgetBook</span>
+					</div>
+					<nav class="space-y-8">
+						<section>
+							<h3 class="mb-4 px-3 text-[11px] font-bold tracking-wider text-slate-400 uppercase">
+								My Budget Books
+							</h3>
+							<ul class="space-y-1">
+								<li class="">
+									<a
+										class="text-brand rounded-custom flex items-center gap-3 bg-blue-50/50 px-3 py-2 font-medium transition-colors"
+										href="#"
+									>
+										<span class="bg-brand h-2 w-2 rounded-full"></span>
+										Personal 2026
+									</a>
+								</li>
+								<li class="">
+									<a
+										class="rounded-custom flex items-center gap-3 px-3 py-2 text-slate-500 transition-colors hover:bg-slate-50 hover:text-slate-700"
+										href="#"
+									>
+										<span class="h-2 w-2 rounded-full bg-slate-200"></span>
+										House Reno
+									</a>
+								</li>
+							</ul>
+						</section>
+						<section>
+							<h3 class="mb-4 px-3 text-[11px] font-bold tracking-wider text-slate-400 uppercase">
+								Shared with Me
+							</h3>
+							<ul class="space-y-1">
+								<li class="">
+									<a
+										class="rounded-custom flex items-center gap-3 px-3 py-2 text-slate-500 transition-colors hover:bg-slate-50 hover:text-slate-700"
+										href="#"
+									>
+										<svg
+											class="h-4 w-4 opacity-70"
+											fill="none"
+											stroke="currentColor"
+											viewBox="0 0 24 24"
+											xmlns="http://www.w3.org/2000/svg"
+										>
+											<path
+												d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
+												stroke-linecap="round"
+												stroke-linejoin="round"
+												stroke-width="2"
+											></path>
+										</svg>
+										Family Expenses
+									</a>
+								</li>
+							</ul>
+						</section>
+					</nav>
+				</div>
+				<div class="mt-auto p-6 shadow-[0_-1px_0_0_rgba(0,0,0,0.02)]">
+					<a
+						class="rounded-custom flex items-center gap-3 px-3 py-2 text-slate-500 transition-colors hover:bg-slate-50 hover:text-slate-700"
+						href="#"
+					>
+						<svg
+							class="h-5 w-5 opacity-70"
+							fill="none"
+							stroke="currentColor"
+							viewBox="0 0 24 24"
+							xmlns="http://www.w3.org/2000/svg"
+						>
+							<path
+								d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								stroke-width="2"
+							></path>
+							<path
+								d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								stroke-width="2"
+							></path>
+						</svg>
+						Settings
+					</a>
+				</div>
+			</aside>
+			<!-- END: Sidebar -->
+			<!-- BEGIN: Main Content -->
+			<main class="relative flex h-full flex-1 flex-col" data-purpose="main-content-area">
+				<!-- BEGIN: Content Header -->
+				<header
+					class="flex shrink-0 items-center justify-between bg-transparent px-8 py-6"
+					data-purpose="header-section"
+				>
+					<div class="flex items-center gap-5">
+						<h1 class="text-2xl font-bold tracking-tight">Personal 2026</h1>
+						<div
+							class="rounded-custom flex items-center bg-slate-100 p-1 text-sm font-semibold shadow-sm"
+						>
+							<button class="rounded-[6px] bg-white px-4 py-1.5 text-slate-800 shadow-sm">
+								Month
+							</button>
+							<button class="px-4 py-1.5 text-slate-500 transition-colors hover:text-slate-700">
+								Year
+							</button>
+						</div>
+					</div>
+					<div class="flex items-center gap-3">
+						<button
+							class="rounded-custom flex items-center gap-2 bg-white px-4 py-2 text-sm font-medium text-slate-600 shadow-sm transition-colors hover:bg-slate-50"
+						>
+							<svg
+								class="h-4 w-4 text-slate-400"
+								fill="none"
+								stroke="currentColor"
+								viewBox="0 0 24 24"
+								xmlns="http://www.w3.org/2000/svg"
+							>
+								<path
+									d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									stroke-width="2"
+								></path>
+							</svg>
+							<span class="">March 2026</span>
+						</button>
+						<button
+							class="bg-brand rounded-custom flex items-center gap-2 px-4 py-2 text-sm font-medium text-white shadow-sm transition-colors hover:bg-blue-600"
+						>
+							<svg
+								class="h-4 w-4"
+								fill="none"
+								stroke="currentColor"
+								viewBox="0 0 24 24"
+								xmlns="http://www.w3.org/2000/svg"
+							>
+								<path
+									d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									stroke-width="2"
+								></path>
+							</svg>
+							Share
+						</button>
+					</div>
+				</header>
+				<!-- END: Content Header -->
+				<!-- BEGIN: Search Bar -->
+				<div class="shrink-0 px-8 pb-4">
+					<div class="relative mx-auto max-w-4xl">
+						<div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+							<svg
+								class="h-5 w-5 text-slate-400"
+								fill="currentColor"
+								viewBox="0 0 20 20"
+								xmlns="http://www.w3.org/2000/svg"
+							>
+								<path
+									clip-rule="evenodd"
+									d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+									fill-rule="evenodd"
+								></path>
+							</svg>
+						</div>
+						<input
+							class="focus:ring-brand focus:border-brand block w-full rounded-xl border-0 bg-white py-3 pr-3 pl-10 text-sm placeholder-slate-400 shadow-sm focus:ring-2"
+							placeholder="Search transactions, categories, or amounts..."
+							type="text"
+						/>
+						<div class="absolute inset-y-0 right-0 flex items-center pr-2">
+							<button class="rounded-md p-1 text-slate-400 hover:text-slate-600">
+								<svg
+									class="h-5 w-5"
+									fill="none"
+									stroke="currentColor"
+									viewBox="0 0 24 24"
+									xmlns="http://www.w3.org/2000/svg"
+								>
+									<path
+										d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"
+										stroke-linecap="round"
+										stroke-linejoin="round"
+										stroke-width="2"
+									></path>
+								</svg>
+							</button>
+						</div>
+					</div>
+				</div>
+				<!-- END: Search Bar -->
+				<!-- BEGIN: Scrollable Content Area -->
+				<div
+					class="custom-scrollbar flex-1 overflow-y-auto px-8 pb-12"
+					data-purpose="budget-list-view"
+				>
+					<div class="mx-auto max-w-4xl space-y-3">
+						<!-- BEGIN: Food/Grocery Section (Expanded / At Risk) -->
+						<article
+							class="overflow-hidden rounded-[16px] bg-white shadow-sm"
+							data-purpose="category-food-grocery"
+						>
+							<div class="cursor-pointer bg-orange-50/30 p-5">
+								<div class="flex items-center gap-4">
+									<div
+										class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-orange-100/50 text-orange-600"
+									>
+										<svg
+											class="h-6 w-6"
+											fill="none"
+											stroke="currentColor"
+											viewBox="0 0 24 24"
+											xmlns="http://www.w3.org/2000/svg"
+										>
+											<path
+												d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
+												stroke-linecap="round"
+												stroke-linejoin="round"
+												stroke-width="2"
+											></path>
+										</svg>
+									</div>
+									<div class="min-w-0 flex-1">
+										<div class="mb-1.5 flex items-center justify-between">
+											<h2 class="truncate text-[17px] font-bold text-slate-800">Food/Grocery</h2>
+											<span class="text-sm font-medium text-slate-600"
+												><span class="font-bold text-orange-600">$1,250</span> / $1,500</span
+											>
+										</div>
+										<!-- Progress Bar -->
+										<div class="h-2 w-full overflow-hidden rounded-full bg-slate-100">
+											<div class="h-full rounded-full bg-orange-500" style="width: 83%"></div>
+										</div>
+									</div>
+									<div class="shrink-0 pl-4">
+										<svg
+											class="h-5 w-5 rotate-180 transform text-slate-400 transition-transform"
+											fill="none"
+											stroke="currentColor"
+											viewBox="0 0 24 24"
+										>
+											<path
+												d="M19 9l-7 7-7-7"
+												stroke-linecap="round"
+												stroke-linejoin="round"
+												stroke-width="2"
+											></path>
+										</svg>
+									</div>
+								</div>
+							</div>
+							<!-- Expanded Line Items -->
+							<div class="px-5 pt-2 pb-5">
+								<div class="space-y-1">
+									<div class="flex items-center justify-between rounded-xl bg-slate-50/50 p-3">
+										<div class="flex items-center gap-3">
+											<div
+												class="flex h-8 w-8 items-center justify-center rounded-full bg-white text-xs font-bold text-slate-400 shadow-sm"
+											>
+												C
+											</div>
+											<div>
+												<p class="text-sm font-medium text-slate-800">Costco</p>
+												<p class="text-xs text-slate-500">Mar 15, 2026</p>
+											</div>
+										</div>
+										<span class="font-semibold text-slate-700">$400.00</span>
+									</div>
+									<div
+										class="flex items-center justify-between rounded-xl p-3 transition-colors hover:bg-slate-50/50"
+									>
+										<div class="flex items-center gap-3">
+											<div
+												class="flex h-8 w-8 items-center justify-center rounded-full bg-white text-xs font-bold text-slate-400 shadow-sm"
+											>
+												W
+											</div>
+											<div>
+												<p class="text-sm font-medium text-slate-800">Woolworths</p>
+												<p class="text-xs text-slate-500">Mar 12, 2026</p>
+											</div>
+										</div>
+										<span class="font-semibold text-slate-700">$215.50</span>
+									</div>
+									<div
+										class="flex items-center justify-between rounded-xl p-3 transition-colors hover:bg-slate-50/50"
+									>
+										<div class="flex items-center gap-3">
+											<div
+												class="flex h-8 w-8 items-center justify-center rounded-full bg-white text-xs font-bold text-slate-400 shadow-sm"
+											>
+												M
+											</div>
+											<div>
+												<p class="text-sm font-medium text-slate-800">Maccas</p>
+												<p class="text-xs text-slate-500">Mar 10, 2026</p>
+											</div>
+										</div>
+										<span class="font-semibold text-slate-700">$50.00</span>
+									</div>
+									<div class="pt-2 text-center">
+										<button class="text-brand py-2 text-xs font-medium hover:text-blue-700">
+											View all 24 transactions
+										</button>
+									</div>
+								</div>
+							</div>
+						</article>
+						<!-- END: Food/Grocery Section -->
+						<!-- BEGIN: Fuel/Transpo Section (Collapsed) -->
+						<article
+							class="rounded-[16px] bg-white shadow-sm transition-shadow hover:shadow-md"
+							data-purpose="category-fuel-transpo"
+						>
+							<div class="cursor-pointer p-5">
+								<div class="flex items-center gap-4">
+									<div
+										class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-blue-50 text-blue-600"
+									>
+										<svg
+											class="h-6 w-6"
+											fill="none"
+											stroke="currentColor"
+											viewBox="0 0 24 24"
+											xmlns="http://www.w3.org/2000/svg"
+										>
+											<path
+												d="M19 14l-7 7m0 0l-7-7m7 7V3"
+												stroke-linecap="round"
+												stroke-linejoin="round"
+												stroke-width="2"
+											></path>
+										</svg>
+									</div>
+									<div class="flex min-w-0 flex-1 items-center gap-6">
+										<div class="w-1/3 shrink-0">
+											<div class="mb-1.5 flex items-center justify-between">
+												<h2 class="truncate text-[17px] font-bold text-slate-800">Fuel/Transpo</h2>
+											</div>
+											<div class="h-1.5 w-full overflow-hidden rounded-full bg-slate-100">
+												<div class="h-full rounded-full bg-blue-500" style="width: 70%"></div>
+											</div>
+											<p class="mt-1.5 text-xs font-medium text-slate-500">
+												<span class="text-slate-800">$210</span> / $300
+											</p>
+										</div>
+										<!-- Mini Quick View -->
+										<div class="no-scrollbar flex flex-1 gap-2 overflow-x-auto py-1">
+											<div
+												class="flex shrink-0 flex-col justify-center rounded-lg bg-slate-50 px-3 py-1.5"
+											>
+												<span class="w-20 truncate text-[11px] text-slate-500">Shell Station</span>
+												<span class="text-xs font-bold text-slate-700">$85.00</span>
+											</div>
+											<div
+												class="flex shrink-0 flex-col justify-center rounded-lg bg-slate-50 px-3 py-1.5"
+											>
+												<span class="w-20 truncate text-[11px] text-slate-500">Uber Trip</span>
+												<span class="text-xs font-bold text-slate-700">$125.00</span>
+											</div>
+										</div>
+									</div>
+									<div class="shrink-0 pl-2">
+										<svg
+											class="h-5 w-5 text-slate-300"
+											fill="none"
+											stroke="currentColor"
+											viewBox="0 0 24 24"
+										>
+											<path
+												d="M19 9l-7 7-7-7"
+												stroke-linecap="round"
+												stroke-linejoin="round"
+												stroke-width="2"
+											></path>
+										</svg>
+									</div>
+								</div>
+							</div>
+						</article>
+						<!-- END: Fuel/Transpo Section -->
+						<!-- BEGIN: Utilities Section (Collapsed) -->
+						<article
+							class="rounded-[16px] bg-white shadow-sm transition-shadow hover:shadow-md"
+							data-purpose="category-utilities"
+						>
+							<div class="cursor-pointer p-5">
+								<div class="flex items-center gap-4">
+									<div
+										class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-purple-50 text-purple-600"
+									>
+										<svg
+											class="h-6 w-6"
+											fill="none"
+											stroke="currentColor"
+											viewBox="0 0 24 24"
+											xmlns="http://www.w3.org/2000/svg"
+										>
+											<path
+												d="M13 10V3L4 14h7v7l9-11h-7z"
+												stroke-linecap="round"
+												stroke-linejoin="round"
+												stroke-width="2"
+											></path>
+										</svg>
+									</div>
+									<div class="flex min-w-0 flex-1 items-center gap-6">
+										<div class="w-1/3 shrink-0">
+											<div class="mb-1.5 flex items-center justify-between">
+												<h2 class="truncate text-[17px] font-bold text-slate-800">Utilities</h2>
+											</div>
+											<div class="h-1.5 w-full overflow-hidden rounded-full bg-slate-100">
+												<div class="h-full rounded-full bg-emerald-500" style="width: 45%"></div>
+											</div>
+											<p class="mt-1.5 text-xs font-medium text-slate-500">
+												<span class="text-slate-800">$180</span> / $400
+											</p>
+										</div>
+										<!-- Mini Quick View -->
+										<div class="no-scrollbar flex flex-1 gap-2 overflow-x-auto py-1">
+											<div
+												class="flex shrink-0 flex-col justify-center rounded-lg bg-slate-50 px-3 py-1.5"
+											>
+												<span class="w-20 truncate text-[11px] text-slate-500">Energy Co</span>
+												<span class="text-xs font-bold text-slate-700">$120.00</span>
+											</div>
+											<div
+												class="flex shrink-0 flex-col justify-center rounded-lg bg-slate-50 px-3 py-1.5"
+											>
+												<span class="w-20 truncate text-[11px] text-slate-500">Water Bill</span>
+												<span class="text-xs font-bold text-slate-700">$60.00</span>
+											</div>
+										</div>
+									</div>
+									<div class="shrink-0 pl-2">
+										<svg
+											class="h-5 w-5 text-slate-300"
+											fill="none"
+											stroke="currentColor"
+											viewBox="0 0 24 24"
+										>
+											<path
+												d="M19 9l-7 7-7-7"
+												stroke-linecap="round"
+												stroke-linejoin="round"
+												stroke-width="2"
+											></path>
+										</svg>
+									</div>
+								</div>
+							</div>
+						</article>
+						<!-- END: Utilities Section -->
+					</div>
+				</div>
+				<!-- END: Scrollable Content Area -->
+			</main>
+			<!-- END: Main Content -->
+		</div>
+		<!-- END: Root Layout -->
+	</body>
+</html>
