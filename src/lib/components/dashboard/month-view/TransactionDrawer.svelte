@@ -1,11 +1,11 @@
 <script lang="ts">
 	import { X } from '@lucide/svelte';
-	import * as Drawer from '../ui/drawer/index.ts';
-	import type { TransactionItem } from '../../types/Transactions/transaction-item.ts';
+	import * as Drawer from '@/components/ui/drawer';
+	import type { TransactionItem } from '@/types/Transactions/transaction-item';
 
 	let {
 		title,
-		open = true,
+		open = false,
 		bookName,
 		category,
 		items

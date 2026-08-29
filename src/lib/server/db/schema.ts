@@ -62,8 +62,8 @@ export const category = pgTable(
 	]
 );
 
-export const item = pgTable(
-	'item',
+export const merchant = pgTable(
+	'merchant',
 	{
 		id: uuid('id').primaryKey().defaultRandom(),
 		categoryId: uuid('category_id')
@@ -77,8 +77,8 @@ export const item = pgTable(
 		updatedAt: timestamp('updated_at', { withTimezone: true }).$onUpdate(() => new Date())
 	},
 	(table) => [
-		index('item_category_id_idx').on(table.categoryId),
-		index('item_created_by_idx').on(table.createdBy)
+		index('merchant_category_id_idx').on(table.categoryId),
+		index('merchant_created_by_idx').on(table.createdBy)
 	]
 );
 
@@ -88,7 +88,7 @@ export const budgetTransaction = pgTable(
 		id: uuid('id').primaryKey().defaultRandom(),
 		itemId: uuid('item_id')
 			.notNull()
-			.references(() => item.id, { onDelete: 'cascade' }),
+			.references(() => merchant.id, { onDelete: 'cascade' }),
 		amount: decimal('amount', { precision: 12, scale: 2 }).notNull(),
 		transactionDate: date('transaction_date').notNull(),
 		note: text('note'),
