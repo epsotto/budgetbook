@@ -13,8 +13,12 @@
 
 	let activeCategoryId = $state(categories?.[0]?.name ?? '');
 	let jumpBarHeight = $state(0);
+	let scrollDebounceTimer: ReturnType<typeof setTimeout> | undefined;
+
+	const SCROLL_DEBOUNCE_MS = 150;
 
 	function handleCategoryClick(id: string) {
+		clearTimeout(scrollDebounceTimer);
 		activeCategoryId = id;
 	}
 
@@ -23,7 +27,11 @@
 			(entries) => {
 				const visible = entries.find((e) => e.isIntersecting);
 				if (visible) {
-					activeCategoryId = visible.target.id.replace('cat-', '');
+					const id = visible.target.id.replace('cat-', '');
+					clearTimeout(scrollDebounceTimer);
+					scrollDebounceTimer = setTimeout(() => {
+						activeCategoryId = id;
+					}, SCROLL_DEBOUNCE_MS);
 				}
 			},
 			{ rootMargin: '-20% 0px -60% 0px' }
@@ -32,7 +40,10 @@
 		const sections = document.querySelectorAll('[data-category-section]');
 		sections.forEach((el) => observer.observe(el));
 
-		return () => observer.disconnect();
+		return () => {
+			observer.disconnect();
+			clearTimeout(scrollDebounceTimer);
+		};
 	});
 </script>
 
