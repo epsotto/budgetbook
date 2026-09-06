@@ -8,17 +8,19 @@
 		open = false,
 		bookName,
 		category,
-		items
+		items,
+		onOpenChange
 	}: {
 		title: string;
 		open: boolean;
 		bookName: string;
 		category: string;
 		items: TransactionItem[];
+		onOpenChange?: (open: boolean) => void;
 	} = $props();
 </script>
 
-<Drawer.Root {open} direction="right">
+<Drawer.Root {open} direction="right" {onOpenChange}>
 	<Drawer.Content class="data-[vaul-drawer-direction=right]:rounded-l-none">
 		<Drawer.Header class="flex flex-row items-start justify-between">
 			<div class="flex flex-col gap-0.5 text-left">

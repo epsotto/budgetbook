@@ -7,11 +7,35 @@
 	let { bookName, view = 'month' } = $props();
 	let headerHeight = $state(0);
 	let categories: Category[] = $state([
-		{ id: 'food', name: 'Food', icon: 'utensils', budget: 400 },
-		{ id: 'entertainment', name: 'Entertainment', icon: 'film', budget: 500 },
-		{ id: 'utilities', name: 'Utilities', icon: 'lightbulb', budget: 400 },
-		{ id: 'transport', name: 'Transport', icon: 'bus', budget: 500 },
-		{ id: 'groceries', name: 'Groceries', icon: 'shopping-cart', budget: 2000 }
+		{ id: 'food', name: 'Food', icon: 'utensils', budget: 400, iconColor: 'var(--chart-1)' },
+		{
+			id: 'entertainment',
+			name: 'Entertainment',
+			icon: 'film',
+			budget: 500,
+			iconColor: 'var(--chart-2)'
+		},
+		{
+			id: 'utilities',
+			name: 'Utilities',
+			icon: 'lightbulb',
+			budget: 400,
+			iconColor: 'var(--chart-3)'
+		},
+		{
+			id: 'transport',
+			name: 'Transport',
+			icon: 'bus',
+			budget: 500,
+			iconColor: 'var(--chart-4)'
+		},
+		{
+			id: 'groceries',
+			name: 'Groceries',
+			icon: 'shopping-cart',
+			budget: 2000,
+			iconColor: 'var(--chart-5)'
+		}
 	] as Category[]);
 
 	let merchantList = [
@@ -19,7 +43,7 @@
 			id: crypto.randomUUID(),
 			name: 'Costco',
 			categoryId: 'groceries',
-			subTotal: 1500,
+			subTotal: 2100,
 			numberOfTransactions: 2
 		},
 		{
@@ -75,5 +99,7 @@
 	<div bind:clientHeight={headerHeight} class="sticky top-0 z-30 bg-background">
 		<PageHeader {bookName} {view} onViewChange={handleViewChange} />
 	</div>
-	<MonthView {categories} {bookName} {merchantList} />
+	{#if view === 'month'}
+		<MonthView {categories} {bookName} {merchantList} />
+	{/if}
 </div>

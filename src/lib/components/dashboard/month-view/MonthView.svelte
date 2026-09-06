@@ -13,9 +13,20 @@
 
 	let activeCategoryId = $state(categories?.[0]?.name ?? '');
 	let jumpBarHeight = $state(0);
+	let scrollDebounceTimer: ReturnType<typeof setTimeout> | undefined;
+	let transactionDrawerOpen = $state(false);
+	let selectedMerchant: Merchant | null = $state(null);
+
+	const SCROLL_DEBOUNCE_MS = 150;
 
 	function handleCategoryClick(id: string) {
+		clearTimeout(scrollDebounceTimer);
 		activeCategoryId = id;
+	}
+
+	function handleMerchantClick(merchant: Merchant) {
+		selectedMerchant = merchant;
+		transactionDrawerOpen = true;
 	}
 
 	$effect(() => {
@@ -23,7 +34,11 @@
 			(entries) => {
 				const visible = entries.find((e) => e.isIntersecting);
 				if (visible) {
-					activeCategoryId = visible.target.id.replace('cat-', '');
+					const id = visible.target.id.replace('cat-', '');
+					clearTimeout(scrollDebounceTimer);
+					scrollDebounceTimer = setTimeout(() => {
+						activeCategoryId = id;
+					}, SCROLL_DEBOUNCE_MS);
 				}
 			},
 			{ rootMargin: '-20% 0px -60% 0px' }
@@ -32,7 +47,10 @@
 		const sections = document.querySelectorAll('[data-category-section]');
 		sections.forEach((el) => observer.observe(el));
 
-		return () => observer.disconnect();
+		return () => {
+			observer.disconnect();
+			clearTimeout(scrollDebounceTimer);
+		};
 	});
 </script>
 
@@ -50,16 +68,21 @@
 				data-category-section
 				class="scroll-mt-[calc(var(--sticky-header-offset)_+_var(--jump-bar-height))]"
 			>
-				<CategorySections {category} merchants={merchantList} />
+				<CategorySections
+					{category}
+					merchants={merchantList}
+					onMerchantClick={handleMerchantClick}
+				/>
 			</div>
 		{/each}
 	</div>
 </div>
 
 <TransactionDrawer
-	open={false}
+	open={transactionDrawerOpen}
 	title="Add Transaction"
 	{bookName}
-	category="Uncategorized"
+	category={selectedMerchant?.name ?? 'Uncategorised'}
+	onOpenChange={(state) => (transactionDrawerOpen = state)}
 	items={[{ amount: 100, date: '2023-01-01', description: 'Sample Transaction' }]}
 />
