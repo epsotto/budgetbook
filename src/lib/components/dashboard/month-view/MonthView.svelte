@@ -14,12 +14,19 @@
 	let activeCategoryId = $state(categories?.[0]?.name ?? '');
 	let jumpBarHeight = $state(0);
 	let scrollDebounceTimer: ReturnType<typeof setTimeout> | undefined;
+	let transactionDrawerOpen = $state(false);
+	let selectedMerchant: Merchant | null = $state(null);
 
 	const SCROLL_DEBOUNCE_MS = 150;
 
 	function handleCategoryClick(id: string) {
 		clearTimeout(scrollDebounceTimer);
 		activeCategoryId = id;
+	}
+
+	function handleMerchantClick(merchant: Merchant) {
+		selectedMerchant = merchant;
+		transactionDrawerOpen = true;
 	}
 
 	$effect(() => {
@@ -61,16 +68,21 @@
 				data-category-section
 				class="scroll-mt-[calc(var(--sticky-header-offset)_+_var(--jump-bar-height))]"
 			>
-				<CategorySections {category} merchants={merchantList} />
+				<CategorySections
+					{category}
+					merchants={merchantList}
+					onMerchantClick={handleMerchantClick}
+				/>
 			</div>
 		{/each}
 	</div>
 </div>
 
 <TransactionDrawer
-	open={false}
+	open={transactionDrawerOpen}
 	title="Add Transaction"
 	{bookName}
-	category="Uncategorized"
+	category={selectedMerchant?.name ?? 'Uncategorised'}
+	onOpenChange={(state) => (transactionDrawerOpen = state)}
 	items={[{ amount: 100, date: '2023-01-01', description: 'Sample Transaction' }]}
 />

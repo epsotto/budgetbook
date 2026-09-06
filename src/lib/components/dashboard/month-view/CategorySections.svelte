@@ -3,7 +3,12 @@
 	import { categoryIcons, defaultIcon } from '@/icons';
 	import type { Merchant } from '@/types/Transactions/merchant';
 
-	let { category, merchants }: { category: Category; merchants: Merchant[] } = $props();
+	let {
+		category,
+		merchants,
+		onMerchantClick
+	}: { category: Category; merchants: Merchant[]; onMerchantClick: (merchant: Merchant) => void } =
+		$props();
 	let Icon = $derived(categoryIcons[category.icon] ?? defaultIcon);
 	let merchantsUnderCategory = $derived(
 		merchants.filter((merchant) => merchant.categoryId === category.id)
@@ -55,7 +60,10 @@
 		</thead>
 		<tbody>
 			{#each merchantsUnderCategory as merchant (merchant.id)}
-				<tr>
+				<tr
+					class="cursor-pointer transition-colors hover:bg-slate-100"
+					onclick={() => onMerchantClick(merchant)}
+				>
 					<td class="p-4">{merchant.name}</td>
 					<td class="p-4 text-right">2</td>
 					<td class="p-4 text-right">{merchant.subTotal}</td>
