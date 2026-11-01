@@ -16,6 +16,10 @@
 	let scrollDebounceTimer: ReturnType<typeof setTimeout> | undefined;
 	let transactionDrawerOpen = $state(false);
 	let selectedMerchant: Merchant | null = $state(null);
+	let selectedCategoryName = $derived(
+		categories.find((category) => category.id === selectedMerchant?.categoryId)?.name ??
+			'Uncategorised'
+	);
 
 	const SCROLL_DEBOUNCE_MS = 150;
 
@@ -80,9 +84,8 @@
 
 <TransactionDrawer
 	open={transactionDrawerOpen}
-	title="Add Transaction"
+	merchant={selectedMerchant}
+	categoryName={selectedCategoryName}
 	{bookName}
-	category={selectedMerchant?.name ?? 'Uncategorised'}
 	onOpenChange={(state) => (transactionDrawerOpen = state)}
-	items={[{ amount: 100, date: '2023-01-01', description: 'Sample Transaction' }]}
 />
