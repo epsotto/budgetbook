@@ -4,18 +4,32 @@
 	import CategorySections from './CategorySections.svelte';
 	import TransactionDrawer from './TransactionDrawer.svelte';
 	import type { Merchant } from '@/types/Transactions/merchant';
+	import type { TransactionItem } from '@/types/Transactions/transaction-item';
 
 	let {
 		categories,
 		bookName,
-		merchantList
-	}: { categories: Category[]; bookName: string; merchantList: Merchant[] } = $props();
+		merchantList,
+		onTransactionAdded
+	}: {
+		categories: Category[];
+		bookName: string;
+		merchantList: Merchant[];
+		onTransactionAdded: (merchantId: string, transaction: TransactionItem) => void;
+	} = $props();
 
 	let activeCategoryId = $state(categories?.[0]?.name ?? '');
 	let jumpBarHeight = $state(0);
 	let scrollDebounceTimer: ReturnType<typeof setTimeout> | undefined;
 	let transactionDrawerOpen = $state(false);
-	let selectedMerchant: Merchant | null = $state(null);
+	let selectedMerchantId = $state<string | null>(null);
+	let selectedMerchant = $derived(
+		merchantList.find((merchant) => merchant.id === selectedMerchantId) ?? null
+	);
+	let selectedCategoryName = $derived(
+		categories.find((category) => category.id === selectedMerchant?.categoryId)?.name ??
+			'Uncategorised'
+	);
 
 	const SCROLL_DEBOUNCE_MS = 150;
 
@@ -25,7 +39,7 @@
 	}
 
 	function handleMerchantClick(merchant: Merchant) {
-		selectedMerchant = merchant;
+		selectedMerchantId = merchant.id;
 		transactionDrawerOpen = true;
 	}
 
@@ -80,9 +94,9 @@
 
 <TransactionDrawer
 	open={transactionDrawerOpen}
-	title="Add Transaction"
+	merchant={selectedMerchant}
+	categoryName={selectedCategoryName}
 	{bookName}
-	category={selectedMerchant?.name ?? 'Uncategorised'}
 	onOpenChange={(state) => (transactionDrawerOpen = state)}
-	items={[{ amount: 100, date: '2023-01-01', description: 'Sample Transaction' }]}
+	{onTransactionAdded}
 />

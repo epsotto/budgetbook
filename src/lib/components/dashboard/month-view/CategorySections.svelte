@@ -19,9 +19,13 @@
 		...draftMerchants
 	]);
 	let merchantSubTotal = $derived(
-		merchantsUnderCategory.reduce((sum, merchant) => sum + merchant.subTotal, 0)
+		merchantsUnderCategory.reduce((sum, merchant) => sum + merchantTotal(merchant), 0)
 	);
 	let expensePercent = $derived((merchantSubTotal / category.budget) * 100);
+
+	function merchantTotal(merchant: Merchant) {
+		return merchant.transactions.reduce((sum, transaction) => sum + Number(transaction.amount), 0);
+	}
 
 	function handleAddingNewItem() {
 		newItemName = '';
@@ -41,9 +45,8 @@
 				{
 					id: crypto.randomUUID(),
 					name,
-					subTotal: 0,
-					numberOfTransactions: 0,
-					categoryId: category.id
+					categoryId: category.id,
+					transactions: []
 				}
 			];
 		}
@@ -77,7 +80,7 @@
 		<div class="col-2">
 			<span
 				class="text-3xl font-semibold {expensePercent >= 100 ? 'text-red-500' : 'text-slate-600'}"
-				>${merchantSubTotal}</span
+				>${merchantSubTotal.toFixed(2)}</span
 			><span class="text-lg">/${category.budget}</span>
 			<div class="h-1.5 w-48 overflow-hidden rounded-full bg-slate-100">
 				<div
@@ -108,8 +111,8 @@
 					onclick={() => onMerchantClick(merchant)}
 				>
 					<td class="p-4">{merchant.name}</td>
-					<td class="p-4 text-right">{merchant.numberOfTransactions}</td>
-					<td class="p-4 text-right">${merchant.subTotal.toFixed(2)}</td>
+					<td class="p-4 text-right">{merchant.transactions.length}</td>
+					<td class="p-4 text-right">${merchantTotal(merchant).toFixed(2)}</td>
 				</tr>
 			{/each}
 			{#if isAddingNewItem}
