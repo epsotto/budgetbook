@@ -3,6 +3,7 @@
 	import MonthView from './month-view/MonthView.svelte';
 	import PageHeader from './PageHeader.svelte';
 	import type { Merchant } from '@/types/Transactions/merchant';
+	import type { TransactionItem } from '@/types/Transactions/transaction-item';
 
 	let { bookName, view = 'month' } = $props();
 	let headerHeight = $state(0);
@@ -38,7 +39,7 @@
 		}
 	] as Category[]);
 
-	let merchantList = [
+	let merchantList = $state<Merchant[]>([
 		{
 			id: crypto.randomUUID(),
 			name: 'Costco',
@@ -110,7 +111,15 @@
 			categoryId: 'entertainment',
 			transactions: [{ date: '2026-03-12', description: 'Movie ticket', amount: 30 }]
 		}
-	] as Merchant[];
+	]);
+
+	function handleTransactionAdded(merchantId: string, transaction: TransactionItem) {
+		merchantList = merchantList.map((merchant) =>
+			merchant.id === merchantId
+				? { ...merchant, transactions: [...merchant.transactions, transaction] }
+				: merchant
+		);
+	}
 
 	function handleViewChange(newView: string) {
 		view = newView;
@@ -122,6 +131,6 @@
 		<PageHeader {bookName} {view} onViewChange={handleViewChange} />
 	</div>
 	{#if view === 'month'}
-		<MonthView {categories} {bookName} {merchantList} />
+		<MonthView {categories} {bookName} {merchantList} onTransactionAdded={handleTransactionAdded} />
 	{/if}
 </div>
