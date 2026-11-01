@@ -1,6 +1,6 @@
 # BudgetBook — Task Breakdown
 
-> Reference: [PLANNING.md](PLANNING.md) · Mocks: `mocks/dashboard_screen.png`, `mocks/yearly_view_screen.png`, `mocks/transaction_drawer_screen.png`
+> Current status overview: [PROGRESS.md](PROGRESS.md). Reference: [PLANNING.md](PLANNING.md) · Mocks: `mocks/dashboard_screen.png`, `mocks/yearly_view_screen.png`, `mocks/transaction_drawer_screen.png`
 
 ---
 
@@ -51,19 +51,17 @@
 
 ### Route groups
 
-- [x] Create `src/routes/(auth)/` group directory
-- [x] Move existing `demo/better-auth/login/` pages into `src/routes/(auth)/login/`
+- [x] Create the `(landing)` route group for public pages, including login and signup
 - [x] Create `src/routes/(app)/` group directory
 
 ### Auth guard
 
 - [x] Create `src/routes/(app)/+layout.server.ts` — redirect to `/login` if no session
-- [x] Create `src/routes/(app)/+layout.svelte` — renders Sidebar + `<slot />`
+- [x] Create `src/routes/(app)/+layout.svelte` — renders Sidebar + child route content
 
 ### Root cleanup
 
-- [x] Remove `/demo` routes once login is migrated
-- [x] Update root `+layout.svelte` if needed (fonts, global CSS resets)
+- [x] Keep the root layout and global CSS in place for the route groups
 
 ---
 
@@ -73,16 +71,17 @@
 
 ### Components (`src/lib/components/sidebar/`)
 
-- [x] `Sidebar.svelte` — fixed left panel, dark background, full height
-- [x] `SidebarBookList.svelte` — "MY BUDGET BOOKS" section heading + list of book links; active book highlighted
-- [x] `SidebarSharedList.svelte` — "SHARED WITH ME" section heading + list
+- [x] `Sidebar.svelte` — full-height sidebar shell
+- [x] `SidebarBookList.svelte` — "MY BUDGET BOOKS" section UI (currently placeholder books)
+- [x] `SidebarSharedList.svelte` — "SHARED WITH ME" section UI
 - [x] `SidebarSettingsLink.svelte` — settings icon + label, links to `/settings`
-- [x] `SidebarUserAvatar.svelte` — bottom of sidebar, shows avatar + name, logout button
+- [x] `SidebarUserAvatar.svelte` — user avatar area
+- [x] `SidebarSignout.svelte` — sign-out control
 
 ### Wiring
 
 - [ ] Load user's budget books in `(app)/+layout.server.ts` and pass to layout
-- [ ] Sidebar links navigate to `/<bookId>`
+- [ ] Replace placeholder book entries and `#` links with database-backed navigation to a selected book
 
 ---
 
@@ -90,11 +89,13 @@
 
 > Reference: `mocks/dashboard_screen.png`
 
+> The current `/dashboard` is a client-side prototype with seeded sample data. The intended per-book route and database-backed page are not implemented yet.
+
 ### Server
 
 - [ ] Create `src/routes/(app)/[bookId]/+page.server.ts`
   - [ ] Validate `bookId`, check membership
-  - [ ] Load categories + items + transactions for the selected month/year
+  - [ ] Load categories + merchants + transactions for the selected month/year
   - [ ] Return typed `PageData`
 
 ### Page
@@ -106,22 +107,20 @@
 
 > Top bar visible in both views
 
-- [ ] Book title on the left
-- [ ] Month/Year toggle (pill/tab switcher)
-- [ ] Context button: date picker (Month view) or "Overview" (Year view)
+- [x] Book title on the left
+- [x] Month/Year toggle (pill/tab switcher)
+- [x] Month/year date picker
 - [ ] "Share" button (opens share modal — deferred to Milestone 8)
 
-### `MonthView` component (`src/lib/components/month-view/`)
+### `MonthView` component (`src/lib/components/dashboard/month-view/`)
 
-- [ ] `MonthView.svelte` — scrollable list of `CategoryCard`s
+- [x] `MonthView.svelte` — category navigation and scrollable list of category sections
 
 ### `CategoryCard` component
 
-- [ ] `CategoryCard.svelte` — card wrapper
-- [ ] `CategoryHeader.svelte` — category icon (Lucide), name, "spent / budget" amounts
-- [ ] `ProgressBar.svelte` — coloured fill based on spent ÷ budget ratio; turns red when over budget
-- [ ] `ItemRow.svelte` — item name on left, total amount on right; clicking opens `TransactionDrawer`
-- [ ] `CategoryFooter.svelte` — "Total Spent" label + summed amount for the card
+- [x] `CategoryCard.svelte` — category card with icon, budget/spend summary, progress indicator, merchant rows, and add-item UI
+- [x] Clicking a merchant row opens the transaction drawer
+- [ ] Persist category and merchant data; replace the current in-memory sample data and draft-only item creation
 
 ---
 
@@ -129,22 +128,22 @@
 
 > Reference: `mocks/transaction_drawer_screen.png`
 
-### Component (`src/lib/components/transaction-drawer/`)
+### Component (`src/lib/components/dashboard/month-view/TransactionDrawer.svelte`)
 
-- [ ] `TransactionDrawer.svelte` — slide-in panel from the right, backdrop overlay
-- [ ] `DrawerHeader.svelte` — item name as title, "BookName • Category" breadcrumb, close (×) button
-- [ ] `DrawerTable.svelte` — table with columns DATE, DESCRIPTION, AMOUNT
-- [ ] `TransactionRow.svelte` — one row per transaction; inline edit/delete on hover
-- [ ] `DrawerFooter.svelte` — "Total for [Item]" label + summed amount
-- [ ] `AddTransactionButton.svelte` — sticky button at the bottom of the drawer
+- [x] Slide-in drawer with header, book/category context, transaction list, total, and close control
+- [x] Add Transaction button switches the drawer into an inline entry form
+- [x] Validate description, positive amount, and date before accepting an entry
+- [x] Cancel the draft, and confirm before discarding it when closing the drawer or pressing Escape
 
 ### Add Transaction form
 
-- [ ] Inline form (within drawer) with fields: date, description, amount
-- [ ] Form action in `[bookId]/+page.server.ts` — `addTransaction`
-- [ ] Optimistic UI update after submit (or full page invalidation)
+- [x] Inline form within the drawer with date, description, and amount fields
+- [x] Pass a valid new transaction to the dashboard and display it in the current in-memory session
+- [ ] Form action in `[bookId]/+page.server.ts` — `addTransaction`; persist the transaction and refresh/reconcile the UI from saved data
 - [ ] Form action — `deleteTransaction`
 - [ ] Form action — `editTransaction` (inline row editing)
+
+> The current add flow is client-side only: submitted transactions are not saved to the database and are lost on reload.
 
 ---
 
@@ -154,7 +153,7 @@
 
 ### Components (`src/lib/components/year-view/`)
 
-- [ ] `YearView.svelte` — horizontally scrollable container
+- [ ] `YearView.svelte` — implement and connect a horizontally scrollable year view (current component is empty)
 - [ ] `SpreadsheetToolbar.svelte` — "Yearly Budget Spreadsheet" title, Export CSV button, "+ Add Category" button
 - [ ] `SpreadsheetTable.svelte` — CSS grid / table for the 12-month layout
 - [ ] `ColumnHeaders.svelte` — "Category / Item" fixed column + Jan–Dec headers; current month visually highlighted
