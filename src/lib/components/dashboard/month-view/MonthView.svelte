@@ -10,12 +10,16 @@
 		categories,
 		bookName,
 		merchantList,
-		onTransactionAdded
+		onTransactionAdded,
+		onTransactionUpdated,
+		onTransactionDeleted
 	}: {
 		categories: Category[];
 		bookName: string;
 		merchantList: Merchant[];
 		onTransactionAdded: (merchantId: string, transaction: TransactionItem) => void;
+		onTransactionUpdated: (merchantId: string, transaction: TransactionItem) => void;
+		onTransactionDeleted: (merchantId: string, transactionId: string) => void;
 	} = $props();
 
 	let activeCategoryId = $state(categories?.[0]?.name ?? '');
@@ -99,4 +103,6 @@
 	{bookName}
 	onOpenChange={(state) => (transactionDrawerOpen = state)}
 	{onTransactionAdded}
+	{onTransactionUpdated}
+	{onTransactionDeleted}
 />
