@@ -257,3 +257,8 @@
 - [ ] Unit tests for amount aggregation helpers (category totals, month sums)
 - [ ] Integration tests for `addTransaction`, `createCategory`, `createItem` form actions
 - [ ] E2E smoke test: login → create book → add category → add transaction → verify in drawer
+
+### Security / crypto (low priority — noted, not scheduled)
+
+- [ ] Replace or harden `crypto.randomUUID()` usage in `Dashboard.svelte`, `TransactionDrawer.svelte`, and `CategorySections.svelte` — it requires a secure context (HTTPS or `localhost`) and throws over plain HTTP on other hosts. Add a fallback ID generator or enforce HTTPS before deploying anywhere non-local.
+- [ ] Do not add the npm `crypto` package (v1.0.1, deprecated name-holding stub with no code); keep using the built-in Web Crypto API in the browser and `node:crypto` on the server.
