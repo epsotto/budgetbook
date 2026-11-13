@@ -18,6 +18,14 @@ import GraduationCap from '@lucide/svelte/icons/graduation-cap';
 import BookOpen from '@lucide/svelte/icons/book-open';
 import Landmark from '@lucide/svelte/icons/landmark';
 import Wallet from '@lucide/svelte/icons/wallet';
+import Hammer from '@lucide/svelte/icons/hammer';
+import Wrench from '@lucide/svelte/icons/wrench';
+import Sofa from '@lucide/svelte/icons/sofa';
+import HardHat from '@lucide/svelte/icons/hard-hat';
+import ShowerHead from '@lucide/svelte/icons/shower-head';
+import Laptop from '@lucide/svelte/icons/laptop';
+import Server from '@lucide/svelte/icons/server';
+import Briefcase from '@lucide/svelte/icons/briefcase';
 import Circle from '@lucide/svelte/icons/circle';
 import { Film, Pizza } from '@lucide/svelte';
 
@@ -41,8 +49,16 @@ export const categoryIcons: Record<string, Component> = {
 	'book-open': BookOpen,
 	landmark: Landmark,
 	wallet: Wallet,
+	hammer: Hammer,
+	wrench: Wrench,
+	sofa: Sofa,
+	'hard-hat': HardHat,
+	'shower-head': ShowerHead,
+	laptop: Laptop,
+	server: Server,
+	briefcase: Briefcase,
 	film: Film,
-	pizza: Pizza,
+	pizza: Pizza
 };
 
 export const defaultIcon = Circle;

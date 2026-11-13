@@ -101,7 +101,7 @@
 ### Page
 
 - [ ] Create `src/routes/(app)/[bookId]/+page.svelte`
-  - [ ] Conditionally render `<MonthView>` or `<YearView>` based on active toggle
+  - [x] Conditionally render `<MonthView>` or `<YearView>` based on active toggle
 
 ### `PageHeader` component
 
@@ -153,14 +153,16 @@
 
 ### Components (`src/lib/components/year-view/`)
 
-- [ ] `YearView.svelte` — implement and connect a horizontally scrollable year view (current component is empty)
-- [ ] `SpreadsheetToolbar.svelte` — "Yearly Budget Spreadsheet" title, Export CSV button, "+ Add Category" button
-- [ ] `SpreadsheetTable.svelte` — CSS grid / table for the 12-month layout
-- [ ] `ColumnHeaders.svelte` — "Category / Item" fixed column + Jan–Dec headers; current month visually highlighted
-- [ ] `CategoryRow.svelte` — bold row showing monthly category totals; "+" button to add an item
-- [ ] `ItemRow.svelte` (year variant) — indented under category, monthly amounts per column; opens `TransactionDrawer` on click
-- [ ] `EntryRow.svelte` — optional expandable sub-row showing individual dated entries (e.g. "March 1, 2026 – Bulk Supplies")
-- [ ] `TotalRow.svelte` — dark background, green text; sums all categories per month
+- [x] `YearView.svelte` — implement and connect a horizontally scrollable year view
+- [x] `SpreadsheetToolbar.svelte` — "Yearly Budget Spreadsheet" title, Export CSV button, "+ Add Category" button
+- [x] `SpreadsheetTable.svelte` — CSS grid / table for the 12-month layout
+- [x] `ColumnHeaders.svelte` — "Category / Item" fixed column + Jan–Dec headers; current month visually highlighted
+- [x] `CategoryRow.svelte` — bold row showing monthly category totals; "+" button to add an item
+- [x] `ItemRow.svelte` (year variant) — indented under category, monthly amounts per column; opens `TransactionDrawer` on click
+- [x] `EntryRow.svelte` — optional expandable sub-row showing individual dated entries (e.g. "March 1, 2026 – Bulk Supplies")
+- [x] `TotalRow.svelte` — dark background, green text; sums all categories per month
+
+> The year view currently reads from the same in-memory sample data as the month view. Category and item creation are client-side only until the server actions below are implemented.
 
 ### Server
 
@@ -169,7 +171,7 @@
 
 ### Actions
 
-- [ ] Export CSV — serialize year data to CSV and trigger download
+- [x] Export CSV — serialize year data to CSV and trigger download
 - [ ] "+ Add Category" — form action `createCategory`
 - [ ] "+ Add Item" — form action `createItem` (triggered per category row)
 
