@@ -2,6 +2,8 @@
 
 > Current status overview: [PROGRESS.md](PROGRESS.md). Reference: [PLANNING.md](PLANNING.md) · Mocks: `mocks/dashboard_screen.png`, `mocks/yearly_view_screen.png`, `mocks/transaction_drawer_screen.png`
 
+> **Status snapshot (2026-11-13):** Milestones 0–2 complete. Milestones 3–6 have their UI built but still run on in-memory sample data — the server layer is the critical path. Milestones 7–10 not started. Details in [PROGRESS.md](PROGRESS.md).
+
 ---
 
 ## Milestone 0 — Environment & Better Auth Bootstrap
@@ -35,12 +37,12 @@
 ## Milestone 1 — Database Schema & Migrations
 
 - [x] Replace placeholder `task` table in `src/lib/server/db/schema.ts` with the full app schema
-- [x] Define `budgetBook` table — `id`, `name`, `ownerId`, `createdAt`, `updatedAt`
+- [x] Define `budgetBook` table — `id`, `name`, `createdBy`, `createdAt`, `updatedBy`, `updatedAt` (ownership comes from `budgetBookMember.role`, there is no separate `ownerId`)
 - [x] Define `budgetBookMember` table — `bookId`, `userId`, `role` (`owner | editor | viewer`)
 - [x] Define `category` table — `id`, `bookId`, `name`, `icon`, `budgetAmount` (monthly ceiling), `sortOrder`
-- [x] Define `item` table — `id`, `categoryId`, `name`, `sortOrder`, `createdBy` (userId), `createdAt`, `updatedBy` (userId), `updatedAt`
-- [x] Define `transaction` table — `id`, `itemId`, `amount`, `date`, `note`, `createdBy` (userId), `createdAt`, `updatedBy` (userId), `updatedAt`
-- [x] Add foreign key relations and indexes (bookId, categoryId, itemId, date, createdBy)
+- [x] Define `item` table (named `merchant` in the actual schema) — `id`, `categoryId`, `name`, `sortOrder`, `createdBy` (userId), `createdAt`, `updatedBy` (userId), `updatedAt`
+- [x] Define `transaction` table (named `budgetTransaction` / `budget_transaction`) — `id`, `itemId`, `amount`, `transactionDate`, `note`, `createdBy` (userId), `createdAt`, `updatedBy` (userId), `updatedAt`
+- [x] Add foreign key relations and indexes (bookId, categoryId, itemId, date, createdBy) — FKs and indexes are in place; no Drizzle `relations()` helpers for app tables yet
 - [x] `createdBy` / `updatedBy` on `item` and `transaction` reference the auth `user` table, enabling per-user attribution in shared books
 - [x] Run `npm run db:push` to apply schema to local Postgres
 - [x] Verify schema with `npm run db:studio`
@@ -72,8 +74,8 @@
 ### Components (`src/lib/components/sidebar/`)
 
 - [x] `Sidebar.svelte` — full-height sidebar shell
-- [x] `SidebarBookList.svelte` — "MY BUDGET BOOKS" section UI (currently placeholder books)
-- [x] `SidebarSharedList.svelte` — "SHARED WITH ME" section UI
+- [x] `SidebarBookList.svelte` — "MY BUDGET BOOKS" section UI (backed by the in-memory `SAMPLE_BOOKS` store)
+- [x] `SidebarSharedList.svelte` — "SHARED WITH ME" section UI (still three hardcoded placeholder entries)
 - [x] `SidebarSettingsLink.svelte` — settings icon + label, links to `/settings`
 - [x] `SidebarUserAvatar.svelte` — user avatar area
 - [x] `SidebarSignout.svelte` — sign-out control
@@ -101,7 +103,7 @@
 ### Page
 
 - [ ] Create `src/routes/(app)/[bookId]/+page.svelte`
-  - [x] Conditionally render `<MonthView>` or `<YearView>` based on active toggle
+  - [x] Conditionally render `<MonthView>` or `<YearView>` based on active toggle — implemented today in `src/lib/components/dashboard/Dashboard.svelte`, rendered from `/dashboard`; still needs moving under the `[bookId]` route
 
 ### `PageHeader` component
 
@@ -139,11 +141,13 @@
 
 - [x] Inline form within the drawer with date, description, and amount fields
 - [x] Pass a valid new transaction to the dashboard and display it in the current in-memory session
+- [x] Edit an existing transaction from the drawer (client-side, in-memory)
+- [x] Delete a transaction from the drawer with a confirmation dialog (client-side, in-memory)
 - [ ] Form action in `[bookId]/+page.server.ts` — `addTransaction`; persist the transaction and refresh/reconcile the UI from saved data
 - [ ] Form action — `deleteTransaction`
 - [ ] Form action — `editTransaction` (inline row editing)
 
-> The current add flow is client-side only: submitted transactions are not saved to the database and are lost on reload.
+> The add/edit/delete flow is client-side only: changes are not saved to the database and are lost on reload.
 
 ---
 
@@ -172,6 +176,8 @@
 ### Actions
 
 - [x] Export CSV — serialize year data to CSV and trigger download
+- [x] "+ Add Category" UI — inline name/budget form, wired to in-memory data
+- [x] "+ Add Item" UI — per-category-row add flow, wired to in-memory data
 - [ ] "+ Add Category" — form action `createCategory`
 - [ ] "+ Add Item" — form action `createItem` (triggered per category row)
 
@@ -207,7 +213,7 @@
 
 ## Milestone 8 — Login Page Polish
 
-- [ ] Style `(auth)/login/+page.svelte` to match app design (dark theme, centered card)
+- [x] Style `(landing)/login/+page.svelte` to match app design (centered card using design tokens). Note: there is no `(auth)` route group; login lives under `(landing)`
 - [ ] Add app logo / wordmark
 - [ ] "Sign in with Google" or email+password toggle (based on existing Better Auth config)
 - [ ] Redirect to last visited book after login; fall back to first book or onboarding
@@ -244,8 +250,8 @@
 ### Accessibility
 
 - [ ] Focus trap in `TransactionDrawer`
-- [ ] Keyboard navigation for sidebar book list
-- [ ] ARIA labels on icon-only buttons (close, add, export)
+- [x] Keyboard navigation for sidebar book list — ArrowUp/ArrowDown/Home/End implemented in `SidebarBookList.svelte`
+- [x] ARIA labels on icon-only buttons (close, add, export) — present on sidebar add/edit/delete, drawer close, and view toggles; re-audit as new icon buttons are added
 - [ ] Colour contrast check on `ProgressBar` states (normal / warning / over-budget)
 
 ### Mobile / Responsive
