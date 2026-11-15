@@ -1,6 +1,6 @@
 # BudgetBook — Task Breakdown
 
-> Current status overview: [PROGRESS.md](PROGRESS.md). Reference: [PLANNING.md](PLANNING.md) · Mocks: `mocks/dashboard_screen.png`, `mocks/yearly_view_screen.png`, `mocks/transaction_drawer_screen.png`
+> Current status overview: [PROGRESS.md](PROGRESS.md). Reference: [PLANNING.md](PLANNING.md) · Mocks: `mocks/dashboard_screen.png`, `mocks/yearly_view_screen.png`, `mocks/transaction_drawer_screen.png`, `mocks/html mocks/settings_page.html`
 
 > **Status snapshot (2026-11-13):** Milestones 0–2 complete. Milestones 3–6 have their UI built but still run on in-memory sample data — the server layer is the critical path. Milestones 7–10 not started. Details in [PROGRESS.md](PROGRESS.md).
 
@@ -41,6 +41,7 @@
 - [x] Define `budgetBookMember` table — `bookId`, `userId`, `role` (`owner | editor | viewer`)
 - [x] Define `category` table — `id`, `bookId`, `name`, `icon`, `budgetAmount` (monthly ceiling), `sortOrder`
 - [x] Define `item` table (named `merchant` in the actual schema) — `id`, `categoryId`, `name`, `sortOrder`, `createdBy` (userId), `createdAt`, `updatedBy` (userId), `updatedAt`
+- **Merchant scope:** a merchant row belongs to exactly one category. The same merchant name can appear in several categories as separate rows — Pak'nSave under Food for groceries and under Transportation for petrol. There is no global merchant registry and no merchant→category mapping table.
 - [x] Define `transaction` table (named `budgetTransaction` / `budget_transaction`) — `id`, `itemId`, `amount`, `transactionDate`, `note`, `createdBy` (userId), `createdAt`, `updatedBy` (userId), `updatedAt`
 - [x] Add foreign key relations and indexes (bookId, categoryId, itemId, date, createdBy) — FKs and indexes are in place; no Drizzle `relations()` helpers for app tables yet
 - [x] `createdBy` / `updatedBy` on `item` and `transaction` reference the auth `user` table, enabling per-user attribution in shared books
@@ -84,6 +85,7 @@
 
 - [ ] Load user's budget books in `(app)/+layout.server.ts` and pass to layout
 - [ ] Replace placeholder book entries and `#` links with database-backed navigation to a selected book
+- [ ] Point `SidebarUserAvatar` at `/settings/profile` — the account nav button deep-links to the Profile tab inside Settings. `SidebarSettingsLink` keeps opening `/settings`, which defaults to Category Library.
 
 ---
 
@@ -185,29 +187,77 @@
 
 ## Milestone 7 — Settings Page
 
+> Reference: `mocks/html mocks/settings_page.html`
+
+### Navigation contract
+
+- The sidebar keeps both entry points exactly as mocked: the **gear** (`SidebarSettingsLink`) opens `/settings`; the **account button** (`SidebarUserAvatar`, labelled with the user's name) deep-links to `/settings/profile`.
+- Settings uses nested routes, so the account entry is a real deep link rather than client-side tab state: `/settings/profile`, `/settings/categories`, `/settings/localisation`, `/settings/notifications`.
+- `/settings` redirects to `/settings/categories` (the mock's active tab). `/profile` redirects to `/settings/profile`; the placeholder route is removed.
+- The settings rail mirrors the mock's three items. Profile is a fourth tab, reachable from the sidebar account button and from an account chip pinned to the bottom of the settings rail.
+- Settings renders its own rail instead of the app sidebar on `/settings/*`; the wordmark links back to the active book.
+- Mobile bottom nav keeps the mock's three icons. Profile is reached from the account button, not a fourth nav item.
+
+### Tab scope
+
+- **Profile** — identity, security, data export, and account deletion.
+- **Category Library** — categories for one book, plus that book's budget rules.
+- **Localisation** — currency, region, timezone, formats, week start, theme, and density.
+- **Notifications** — delivery channel, digest frequency, and alert types.
+
 ### Database & Schema Setup
 
-- [ ] Define `userSetting` table in `src/lib/server/db/schema.ts` — `id`, `userId`, `key`, `value`, `updatedAt`
-- [ ] Run `npm run db:push` to apply the settings schema changes
+- [ ] Define `userSetting` as a typed table with one row per user (`userId` PK/FK → `user.id`, cascade on delete) instead of a generic key/value store:
+  - `currency` (ISO 4217), `locale`, `timeZone`, `dateFormat`, `timeFormat`, `numberFormat`, `weekStart` (0–6)
+  - `theme` (`light | dark | system`), `density` (`comfortable | compact`)
+  - `emailNotifications` (bool), `digestFrequency` (`off | daily | weekly`), `notifyOverBudget` (bool), `notifyAtPercent` (int, default 80)
+  - `updatedAt`
+- [ ] Make `userId` unique. Create the row with defaults on first visit to Settings.
+- [ ] Add `category.color` — a palette key backed by an enum shared with the UI, not a hex string. The TS type already carries `iconColor` (`src/lib/types/Settings/category.ts`); align it with the schema.
+- [ ] Add `category.isArchived` (bool, default false). Archiving is the default destructive action; the row stays in the DB.
+- [ ] Add to `budgetBook`: `isArchived` (bool, default false), `budgetPeriodStartDay` (int, 1–28, default 1), `carryOverEnabled` (bool, default false), `startingBalance` (decimal 12,2, default 0). `startingBalance` anchors the year view's "Total Net Worth Change".
+- [ ] Stay single-currency: one `currency` per user, no FX and no per-book currency override.
+- [ ] Run `npm run db:push` and verify in `npm run db:studio`.
 
 ### Server-Side Implementation
 
-- [ ] Create `src/routes/(app)/settings/+page.server.ts`
-  - [ ] Load user settings config, user profile, books, categories, and establishments/items
-  - [ ] Implement `updateSettingsConfig` form action to save user preferences in `userSetting`
-  - [ ] Implement category management form actions (create, update budget/icon, delete)
-  - [ ] Implement establishment/provider management form actions (create, edit name, change assigned category)
-  - [ ] Implement account actions: update name/contact info, change password, delete account
-- [ ] Implement `deleteAccount` action with cascading deletion across auth and database tables
+- [ ] Create `src/routes/(app)/settings/+layout.server.ts` — load the user, the `userSetting` row, books (including archived), and the active book. Return typed `LayoutData`.
+- [ ] `src/routes/(app)/settings/profile/+page.server.ts`
+  - [ ] `updateProfile` — first/last name, email (Better Auth change-email flow)
+  - [ ] `changePassword`
+  - [ ] `revokeOtherSessions` — list `session` rows and sign out other devices
+  - [ ] `exportAccountData` — full export (books, categories, merchants, transactions, settings) as JSON/CSV zip
+  - [ ] `deleteAccount` — confirmation, export prompt first, cascade across auth and app tables
+- [ ] `src/routes/(app)/settings/categories/+page.server.ts`
+  - [ ] `createCategory`, `updateCategory` (name, icon, color, monthly cap)
+  - [ ] `archiveCategory` / `restoreCategory`
+  - [ ] `reorderCategories` — persist `sortOrder`
+  - [ ] `updateBookBudgetRules` — period start day, carryover, starting balance; owner-only
+  - [ ] Permanent delete stays an explicit secondary action with confirmation; archive is the default
+- [ ] `src/routes/(app)/settings/localisation/+page.server.ts` — `updateLocalisation` for currency, region, timezone, formats, week start, theme, density
+- [ ] `src/routes/(app)/settings/notifications/+page.server.ts` — `updateNotifications` for channel, frequency, alert toggles
+- [ ] Validate every action server-side. Respect `budgetBookMember.role` for category and budget-rule writes once role enforcement lands in Milestone 10 (viewers read-only).
+- [ ] Notification delivery is blocked on an email transport: `src/lib/server/auth.ts` currently runs `emailAndPassword` with no provider configured. Wire SMTP/API before promising any email.
 
-### User Interface Layout (`src/routes/(app)/settings/+page.svelte`)
+### User Interface Layout
 
-- [ ] Build multi-tab settings navigation (General Settings, Categories, Establishments, Account, Books)
-- [ ] **General Settings Tab**: UI to manage application settings config (theme, default currency, etc.)
-- [ ] **Categories Tab**: Edit expense category names, monthly budget ceilings, and Lucide icons
-- [ ] **Establishments/Providers Tab**: Manage known establishments/providers and assign/select which category they map to (e.g. power, internet, groceries)
-- [ ] **Account Tab**: Edit name, password, and contact info (email); include a destructive "Delete Account" action with a confirmation dialog
-- [ ] **Budget Book Management**: Rename, delete, and manage roles for budget books (owner/editor/viewer)
+- [ ] `src/routes/(app)/settings/+layout.svelte` — the mock's rail, active states, and `SETTINGS / <TAB>` breadcrumb.
+- [ ] `src/routes/(app)/settings/+page.svelte` — redirect to `/settings/categories`.
+- [ ] Suppress the app sidebar on `/settings/*` so the settings rail does not nest inside it.
+- [ ] **Profile tab** — name/email/password forms, session list with "sign out other devices", data export, delete-account dialog in a visually separated danger zone (tonal separation, not a 1px border, per `DESIGN.md`).
+- [ ] **Category Library tab** — book selector at the top (defaults to the active book); category grid per the mock; create/edit sheet with name, Lucide icon, preset color swatch, and monthly cap; archive/restore; "Show archived" toggle.
+- [ ] **Category Library — Budget rules** — period start day, carryover toggle, starting balance. Book-level, but grouped here because this is the book-scoped tab.
+- [ ] **Color choice** — roughly eight preset swatches mapped to contrast-safe icon/background pairs in light and dark. No free-form hex picker: it breaks the tonal palette and produces unreadable icons.
+- [ ] **Localisation tab** — currency, region (sets defaults), timezone, date format, 12/24h time, number format with a live preview, week start, theme, density. Theme and density sit here for now so we avoid a fifth tab; split into Appearance if this section grows.
+- [ ] **Language** — English only, shown read-only. No language dropdown until translations exist.
+- [ ] **Notifications tab** — email channel, digest frequency, over-budget / approaching-budget / weekly-summary toggles. Leave per-category granularity and quiet hours out until delivery works.
+- [ ] **Archive behavior** — archived categories are hidden from month and year views, excluded from totals and new entries, and still show in historical exports. Archived books drop out of the sidebar's active list and can be restored.
+
+### Out of scope (deliberately)
+
+- **Merchant → category mapping.** A merchant row already belongs to exactly one category. The same merchant name can appear in several categories as separate rows — Pak'nSave under Food for groceries and under Transportation for petrol. No global merchant registry, no mapping table, no Establishments/Providers tab.
+- **Multi-currency / FX**, **free-form color picker**, **per-category notification matrix**, **language switcher**, **2FA**, **quiet hours**.
+- **Book management as a Settings tab.** Rename/archive/delete stays in the sidebar; members and roles belong to the Share modal (Milestone 10).
 
 ---
 

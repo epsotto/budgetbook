@@ -1,0 +1,493 @@
+<!doctype html>
+
+<html class="light" lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta content="width=device-width, initial-scale=1.0" name="viewport" />
+		<title>BudgetBook - Category Library</title>
+		<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+		<link
+			href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&amp;display=swap"
+			rel="stylesheet"
+		/>
+		<link
+			href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+			rel="stylesheet"
+		/>
+		<script id="tailwind-config">
+			tailwind.config = {
+				darkMode: 'class',
+				theme: {
+					extend: {
+						colors: {
+							'surface-tint': '#0054d6',
+							'on-primary-fixed-variant': '#003fa4',
+							primary: '#0050cb',
+							tertiary: '#006645',
+							'on-error-container': '#93000a',
+							'on-secondary-fixed-variant': '#3f465c',
+							'on-secondary': '#ffffff',
+							'surface-container-low': '#f2f4f6',
+							'surface-bright': '#f7f9fb',
+							outline: '#727687',
+							'primary-fixed': '#dae1ff',
+							secondary: '#565e74',
+							surface: '#f7f9fb',
+							'tertiary-container': '#008259',
+							'primary-container': '#0066ff',
+							'on-background': '#191c1e',
+							error: '#ba1a1a',
+							'on-primary': '#ffffff',
+							background: '#f7f9fb',
+							'on-surface-variant': '#424656',
+							'on-secondary-fixed': '#131b2e',
+							'on-primary-fixed': '#001849',
+							'secondary-container': '#dae2fd',
+							'on-secondary-container': '#5c647a',
+							'secondary-fixed': '#dae2fd',
+							'on-tertiary-fixed-variant': '#005236',
+							'surface-container-highest': '#e0e3e5',
+							'outline-variant': '#c2c6d8',
+							'inverse-surface': '#2d3133',
+							'surface-dim': '#d8dadc',
+							'surface-container': '#eceef0',
+							'secondary-fixed-dim': '#bec6e0',
+							'on-tertiary-fixed': '#002113',
+							'error-container': '#ffdad6',
+							'on-tertiary-container': '#e1ffec',
+							'on-error': '#ffffff',
+							'surface-container-lowest': '#ffffff',
+							'inverse-primary': '#b3c5ff',
+							'primary-fixed-dim': '#b3c5ff',
+							'surface-container-high': '#e6e8ea',
+							'on-surface': '#191c1e',
+							'tertiary-fixed-dim': '#4edea3',
+							'on-primary-container': '#f8f7ff',
+							'surface-variant': '#e0e3e5',
+							'on-tertiary': '#ffffff',
+							'inverse-on-surface': '#eff1f3',
+							'tertiary-fixed': '#6ffbbe'
+						},
+						borderRadius: {
+							DEFAULT: '0.25rem',
+							lg: '0.5rem',
+							xl: '0.75rem',
+							full: '9999px'
+						},
+						fontFamily: {
+							headline: ['Inter'],
+							body: ['Inter'],
+							label: ['Inter']
+						}
+					}
+				}
+			};
+		</script>
+		<style>
+			body {
+				font-family: 'Inter', sans-serif;
+			}
+			.material-symbols-outlined {
+				font-variation-settings:
+					'FILL' 0,
+					'wght' 400,
+					'GRAD' 0,
+					'opsz' 24;
+				vertical-align: middle;
+			}
+		</style>
+	</head>
+	<body class="bg-surface text-on-surface antialiased">
+		<div class="flex min-h-screen">
+			<!-- Settings Rail -->
+			<aside
+				class="fixed top-0 left-0 z-40 hidden h-full w-64 flex-col bg-white py-10 md:flex dark:bg-slate-950"
+			>
+				<div class="mb-10 px-6">
+					<a class="text-3xl font-black tracking-tighter text-slate-900 dark:text-white" href="#">
+						BudgetBook
+					</a>
+					<p class="text-outline mt-2 text-[10px] font-bold tracking-[0.2em] uppercase">Settings</p>
+				</div>
+				<nav class="flex flex-col">
+					<!-- Active Item -->
+					<a
+						aria-current="page"
+						class="flex items-center gap-3 border-r-4 border-blue-700 bg-slate-50 px-6 py-4 text-sm font-semibold tracking-wide text-blue-700 transition-all duration-300 ease-in-out dark:border-blue-400 dark:bg-slate-900/50 dark:text-blue-400"
+						href="#"
+					>
+						<span class="material-symbols-outlined" data-icon="folder_open">folder_open</span>
+						Category Library
+					</a>
+					<!-- Inactive Items -->
+					<a
+						class="flex items-center gap-3 px-6 py-4 text-sm font-semibold tracking-wide text-slate-400 transition-all duration-300 ease-in-out hover:bg-slate-50 hover:text-slate-900 dark:text-slate-500 dark:hover:bg-slate-900 dark:hover:text-slate-100"
+						href="#"
+					>
+						<span class="material-symbols-outlined" data-icon="language">language</span>
+						Localisation
+					</a>
+					<a
+						class="flex items-center gap-3 px-6 py-4 text-sm font-semibold tracking-wide text-slate-400 transition-all duration-300 ease-in-out hover:bg-slate-50 hover:text-slate-900 dark:text-slate-500 dark:hover:bg-slate-900 dark:hover:text-slate-100"
+						href="#"
+					>
+						<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+						Notifications
+					</a>
+				</nav>
+				<div class="mt-auto px-4">
+					<!-- Account chip: fourth tab, pinned to the bottom of the rail -->
+					<a
+						class="flex items-center gap-3 rounded-xl bg-surface-container-low p-3 transition-colors hover:bg-surface-container-high"
+						href="#"
+					>
+						<span
+							class="bg-secondary-container text-on-secondary-fixed flex h-10 w-10 items-center justify-center rounded-full text-sm font-bold"
+						>
+							AM
+						</span>
+						<span class="min-w-0 flex-1">
+							<span class="block truncate text-sm font-semibold text-slate-900">Alex Morgan</span>
+							<span class="text-outline block text-xs font-medium">Profile</span>
+						</span>
+						<span
+							class="material-symbols-outlined text-outline text-[20px]"
+							data-icon="chevron_right"
+						>
+							chevron_right
+						</span>
+					</a>
+				</div>
+			</aside>
+			<!-- Main Content Wrapper -->
+			<main class="flex flex-1 flex-col md:ml-64">
+				<!-- Header -->
+				<div
+					class="sticky top-0 z-30 flex flex-wrap items-center justify-between gap-4 bg-slate-100/90 px-6 py-6 backdrop-blur md:px-12"
+				>
+					<div class="flex flex-wrap items-center gap-5">
+						<!-- Back to the active book -->
+						<a
+							class="group text-on-surface-variant inline-flex items-center gap-2 rounded-lg bg-white px-3 py-2 text-sm font-semibold shadow-sm transition-colors hover:text-primary"
+							href="#"
+						>
+							<span
+								class="material-symbols-outlined text-[20px] transition-transform group-hover:-translate-x-0.5"
+								data-icon="arrow_back"
+							>
+								arrow_back
+							</span>
+							Back to Personal 2026
+						</a>
+						<nav class="text-outline flex text-[10px] font-bold tracking-[0.2em] uppercase">
+							<span class="text-outline">SETTINGS</span>
+							<span class="mx-2 text-outline-variant">/</span>
+							<span class="text-primary">CATEGORY LIBRARY</span>
+						</nav>
+					</div>
+					<div class="flex items-center gap-4">
+						<button
+							aria-label="Search settings"
+							class="material-symbols-outlined rounded-full p-2 text-slate-400 transition-colors hover:bg-slate-200"
+							data-icon="search"
+						>
+							search
+						</button>
+						<button
+							aria-label="Open help"
+							class="material-symbols-outlined rounded-full p-2 text-slate-400 transition-colors hover:bg-slate-200"
+							data-icon="help_outline"
+						>
+							help_outline
+						</button>
+					</div>
+				</div>
+				<!-- Content Area -->
+				<div class="flex-1 bg-slate-100 px-6 py-6 pb-24 md:px-12 md:pb-6">
+					<div class="mx-auto max-w-5xl">
+						<!-- Category Library Heading -->
+						<div class="flex flex-wrap items-end justify-between gap-6">
+							<div>
+								<h2 class="text-on-surface text-3xl font-bold tracking-tight">Category Library</h2>
+								<p class="text-on-surface-variant mt-2 text-lg">
+									Define the buckets that shape every month in Personal 2026.
+								</p>
+							</div>
+							<button
+								class="text-on-primary flex items-center gap-2 rounded-xl bg-primary px-6 py-3 font-semibold shadow-lg shadow-primary/20 transition-opacity hover:opacity-90"
+							>
+								<span class="material-symbols-outlined" data-icon="add">add</span>
+								Add new category
+							</button>
+						</div>
+						<!-- Library Toolbar -->
+						<div
+							class="mt-8 flex flex-col gap-4 rounded-xl bg-surface-container-lowest p-4 shadow-[0_32px_64px_-16px_rgba(0,0,0,0.04)] md:flex-row md:items-center md:justify-between"
+						>
+							<div class="flex flex-1 flex-col gap-4 sm:flex-row sm:items-center">
+								<label class="block sm:w-56">
+									<span
+										class="text-outline mb-1 block text-[10px] font-bold tracking-widest uppercase"
+									>
+										Budget book
+									</span>
+									<span class="relative block">
+										<select
+											class="w-full appearance-none rounded-lg border-0 bg-surface-container-low py-2.5 pr-9 pl-3 text-sm font-semibold focus:bg-surface-container-lowest focus:ring-2 focus:ring-primary"
+										>
+											<option>Personal 2026</option>
+											<option>Family Expenses</option>
+											<option>Side Project</option>
+										</select>
+										<span
+											class="material-symbols-outlined text-outline pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-[20px]"
+											data-icon="expand_more"
+										>
+											expand_more
+										</span>
+									</span>
+								</label>
+								<label class="block flex-1">
+									<span
+										class="text-outline mb-1 block text-[10px] font-bold tracking-widest uppercase"
+									>
+										Find a category
+									</span>
+									<span class="relative block">
+										<span
+											class="material-symbols-outlined text-outline pointer-events-none absolute top-1/2 left-3 -translate-y-1/2 text-[20px]"
+											data-icon="search"
+										>
+											search
+										</span>
+										<input
+											class="placeholder:text-outline w-full rounded-lg border-0 bg-surface-container-low py-2.5 pr-4 pl-10 text-sm focus:bg-surface-container-lowest focus:ring-2 focus:ring-primary"
+											placeholder="Search by name or icon..."
+											type="search"
+										/>
+									</span>
+								</label>
+							</div>
+							<div class="flex items-center justify-between gap-5 sm:justify-end">
+								<label class="flex cursor-pointer items-center gap-3">
+									<span class="text-on-surface-variant text-sm font-medium">Show archived</span>
+									<input class="peer sr-only" type="checkbox" />
+									<span
+										class="relative h-6 w-11 rounded-full bg-surface-container-highest transition-colors peer-checked:bg-primary after:absolute after:top-0.5 after:left-0.5 after:h-5 after:w-5 after:rounded-full after:bg-white after:transition-transform peer-checked:after:translate-x-5"
+									></span>
+								</label>
+								<span class="text-outline text-[10px] font-bold tracking-widest uppercase"
+									>3 active</span
+								>
+							</div>
+						</div>
+						<!-- Category Bento Grid -->
+						<div class="mt-8 grid grid-cols-1 gap-8 md:grid-cols-3">
+							<!-- Housing Card -->
+							<div
+								class="group rounded-xl bg-surface-container-lowest p-8 shadow-[0_32px_64px_-16px_rgba(0,0,0,0.04)] transition-transform duration-300 hover:translate-y-[-4px]"
+							>
+								<div class="mb-6 flex items-start justify-between">
+									<div
+										class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary-container"
+									>
+										<span
+											class="material-symbols-outlined text-on-primary-container"
+											data-icon="home"
+										>
+											home
+										</span>
+									</div>
+									<button
+										aria-label="Category actions for Housing"
+										class="material-symbols-outlined text-outline rounded-full p-2 text-[20px] transition-colors hover:bg-surface-container-high"
+										data-icon="more_vert"
+									>
+										more_vert
+									</button>
+								</div>
+								<h3 class="mb-1 text-xl font-bold">Housing</h3>
+								<p class="text-outline mb-6 text-sm">Mortgage, rent, utilities, and maintenance.</p>
+								<div class="-mx-8 -mb-8 rounded-b-xl border-t-0 px-8 py-6 pt-6">
+									<div class="text-outline mb-1 text-[10px] font-bold tracking-widest uppercase">
+										Monthly cap
+									</div>
+									<div class="text-on-surface text-2xl font-black">$2,400.00</div>
+								</div>
+							</div>
+							<!-- Entertainment Card -->
+							<div
+								class="group rounded-xl bg-surface-container-lowest p-8 shadow-[0_32px_64px_-16px_rgba(0,0,0,0.04)] transition-transform duration-300 hover:translate-y-[-4px]"
+							>
+								<div class="mb-6 flex items-start justify-between">
+									<div
+										class="flex h-12 w-12 items-center justify-center rounded-lg bg-tertiary-container"
+									>
+										<span
+											class="material-symbols-outlined text-on-tertiary-container"
+											data-icon="theater_comedy"
+										>
+											theater_comedy
+										</span>
+									</div>
+									<button
+										aria-label="Category actions for Entertainment"
+										class="material-symbols-outlined text-outline rounded-full p-2 text-[20px] transition-colors hover:bg-surface-container-high"
+										data-icon="more_vert"
+									>
+										more_vert
+									</button>
+								</div>
+								<h3 class="mb-1 text-xl font-bold">Entertainment</h3>
+								<p class="text-outline mb-6 text-sm">Movies, events, and leisure activities.</p>
+								<div class="-mx-8 -mb-8 rounded-b-xl border-t-0 px-8 py-6 pt-6">
+									<div class="text-outline mb-1 text-[10px] font-bold tracking-widest uppercase">
+										Monthly cap
+									</div>
+									<div class="text-on-surface text-2xl font-black">$450.00</div>
+								</div>
+							</div>
+							<!-- Dining & Groceries Card -->
+							<div
+								class="group rounded-xl bg-surface-container-lowest p-8 shadow-[0_32px_64px_-16px_rgba(0,0,0,0.04)] transition-transform duration-300 hover:translate-y-[-4px]"
+							>
+								<div class="mb-6 flex items-start justify-between">
+									<div
+										class="bg-secondary-container flex h-12 w-12 items-center justify-center rounded-lg"
+									>
+										<span
+											class="material-symbols-outlined text-on-secondary-container"
+											data-icon="restaurant"
+										>
+											restaurant
+										</span>
+									</div>
+									<button
+										aria-label="Category actions for Dining and Groceries"
+										class="material-symbols-outlined text-outline rounded-full p-2 text-[20px] transition-colors hover:bg-surface-container-high"
+										data-icon="more_vert"
+									>
+										more_vert
+									</button>
+								</div>
+								<h3 class="mb-1 text-xl font-bold">Dining &amp; Groceries</h3>
+								<p class="text-outline mb-6 text-sm">
+									Restaurants, cafes, and weekly grocery spend.
+								</p>
+								<div class="-mx-8 -mb-8 rounded-b-xl border-t-0 px-8 py-6 pt-6">
+									<div class="text-outline mb-1 text-[10px] font-bold tracking-widest uppercase">
+										Monthly cap
+									</div>
+									<div class="text-on-surface text-2xl font-black">$900.00</div>
+								</div>
+							</div>
+						</div>
+						<!-- Book Budget Rules -->
+						<section class="mt-10 rounded-xl bg-surface-container-low p-8">
+							<div class="flex flex-wrap items-start justify-between gap-4">
+								<div>
+									<h3 class="text-on-surface text-xl font-bold">Book budget rules</h3>
+									<p class="text-on-surface-variant mt-1 text-sm">
+										Applied to every category in Personal 2026.
+									</p>
+								</div>
+								<span
+									class="text-on-surface-variant rounded-full bg-surface-container-high px-3 py-1 text-[10px] font-bold tracking-widest uppercase"
+								>
+									Owner only
+								</span>
+							</div>
+							<div class="mt-8 grid grid-cols-1 gap-6 md:grid-cols-3">
+								<label class="block">
+									<span
+										class="text-outline mb-2 block text-[10px] font-bold tracking-widest uppercase"
+									>
+										Budget period starts
+									</span>
+									<span class="relative block">
+										<select
+											class="w-full appearance-none rounded-lg border-0 bg-surface-container-lowest py-3 pr-9 pl-3 text-sm font-semibold focus:ring-2 focus:ring-primary"
+										>
+											<option>1st of the month</option>
+											<option>15th of the month</option>
+											<option>25th of the month</option>
+										</select>
+										<span
+											class="material-symbols-outlined text-outline pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-[20px]"
+											data-icon="expand_more"
+										>
+											expand_more
+										</span>
+									</span>
+								</label>
+								<div>
+									<span
+										class="text-outline mb-2 block text-[10px] font-bold tracking-widest uppercase"
+									>
+										Carry over unused budget
+									</span>
+									<label
+										class="flex cursor-pointer items-center justify-between gap-4 rounded-lg bg-surface-container-lowest px-4 py-3"
+									>
+										<span class="text-sm font-semibold">Roll over each month</span>
+										<input class="peer sr-only" type="checkbox" />
+										<span
+											class="relative h-6 w-11 shrink-0 rounded-full bg-surface-container-highest transition-colors peer-checked:bg-primary after:absolute after:top-0.5 after:left-0.5 after:h-5 after:w-5 after:rounded-full after:bg-white after:transition-transform peer-checked:after:translate-x-5"
+										></span>
+									</label>
+								</div>
+								<label class="block">
+									<span
+										class="text-outline mb-2 block text-[10px] font-bold tracking-widest uppercase"
+									>
+										Starting balance
+									</span>
+									<span class="relative block">
+										<span
+											class="text-outline pointer-events-none absolute top-1/2 left-3 -translate-y-1/2 text-sm font-semibold"
+										>
+											$
+										</span>
+										<input
+											class="w-full rounded-lg border-0 bg-surface-container-lowest py-3 pr-4 pl-7 text-sm font-semibold focus:ring-2 focus:ring-primary"
+											inputmode="decimal"
+											type="text"
+											value="0.00"
+										/>
+									</span>
+								</label>
+							</div>
+							<p class="text-outline mt-6 text-xs">
+								Archived categories stay in historical exports but are hidden from month and year
+								views.
+							</p>
+						</section>
+					</div>
+				</div>
+			</main>
+		</div>
+		<!-- Bottom Nav for Mobile -->
+		<nav
+			class="fixed right-0 bottom-0 left-0 z-50 flex h-16 items-center justify-around border-t border-slate-100 bg-white md:hidden dark:border-slate-800 dark:bg-slate-950"
+		>
+			<a
+				class="flex flex-col items-center justify-center text-blue-700 dark:text-blue-400"
+				href="#"
+			>
+				<span class="material-symbols-outlined" data-icon="folder_open">folder_open</span>
+			</a>
+			<a
+				class="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500"
+				href="#"
+			>
+				<span class="material-symbols-outlined" data-icon="language">language</span>
+			</a>
+			<a
+				class="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500"
+				href="#"
+			>
+				<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+			</a>
+		</nav>
+	</body>
+</html>
