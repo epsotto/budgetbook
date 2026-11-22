@@ -1,6 +1,6 @@
 # BudgetBook — Progress
 
-> Last updated: **2026-11-13**. Task-level detail lives in [TASKS.md](TASKS.md). Product/architecture reference: [PLANNING.md](PLANNING.md).
+> Last updated: **2026-11-22**. Task-level detail lives in [TASKS.md](TASKS.md). Product/architecture reference: [PLANNING.md](PLANNING.md).
 
 ## TL;DR
 
@@ -20,7 +20,7 @@
 | 4   | Month dashboard           | 🟡 UI done, no server | `Dashboard.svelte` renders month/year and is mounted at `/dashboard`. No `[bookId]` route; `dashboard/+page.server.ts` is empty. Share button is a no-op. |
 | 5   | Transaction drawer        | 🟡 UI done, no server | Add, edit, and delete work in-memory. No form actions, so changes are lost on reload.                                                                     |
 | 6   | Year view                 | 🟡 UI done, no server | Full spreadsheet layout, CSV export, client-side add category/item. No year load/aggregation and no `createCategory`/`createItem` actions.                |
-| 7   | Settings page             | 🔴 Not started        | `settings/+page.svelte` is a placeholder. No `userSetting` table.                                                                                         |
+| 7   | Settings page             | 🟡 Shell built        | Rail, nested routes, redirects, and sidebar suppression are in. Tabs are placeholders; no `userSetting` table or actions yet.                             |
 | 8   | Login polish              | 🟡 Partial            | Login is a styled centered card. Missing: logo/wordmark, Google toggle, redirect-to-last-book.                                                            |
 | 9   | Onboarding                | 🔴 Not started        | No new-user detection, no `createBudgetBook` action, no `/new` route.                                                                                     |
 | 10  | Collaboration             | ⏸ Deferred            | No share modal, invites, or role enforcement.                                                                                                             |
@@ -35,7 +35,8 @@ Legend: ✅ complete · 🟡 partial · 🔴 not started · ⏸ deferred
 - Month view: category cards, budget progress, merchant rows, category jump bar.
 - Year view: 12-month grid, category/item/entry/total rows, current-month highlight, CSV export.
 - Transaction drawer: view transactions, add, inline edit, delete with confirmation, discard-changes prompt.
-- `npm run check` → **0 errors, 5 warnings** (placeholder `href="#"` in `SidebarSharedList` and related).
+- Settings shell: `/settings` redirects to `/settings/categories`, the rail and breadcrumb work across all four tabs, `/profile` redirects to `/settings/profile`, and the app sidebar is hidden on `/settings/*`.
+- `npm run check` → **0 errors, 6 warnings** (placeholder `href="#"` in `SidebarSharedList` and related).
 
 ## Known deviations from TASKS.md / schema
 
@@ -62,7 +63,7 @@ Legend: ✅ complete · 🟡 partial · 🔴 not started · ⏸ deferred
 4. **Add category/item actions** — `createCategory`, `createItem` for both month and year views.
 5. **Wire the sidebar** — load books (owned + shared) in `(app)/+layout.server.ts`, replace `SAMPLE_BOOKS`, and link to `/<bookId>`.
 6. **Onboarding** — `createBudgetBook` action, new-user detection, redirect to the new book.
-7. **Settings** — add `userSetting`, build the tabs, implement account/book/category actions.
+7. **Settings** — fill in the tab content: add `userSetting`, then implement account/book/category actions.
 8. **Polish** — loading/empty/error states, focus trap, mobile layout, tests.
 
 ## Verification

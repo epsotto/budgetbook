@@ -5,6 +5,8 @@
 
 	let { children, data } = $props();
 
+	const showSidebar = $derived(!page.url.pathname.startsWith('/settings'));
+
 	const bookStore = setBudgetBookStore(createBudgetBookStore(data.books));
 
 	$effect(() => {
@@ -23,7 +25,9 @@
 </script>
 
 <div class="flex h-screen">
-	<Sidebar {bookStore} />
+	{#if showSidebar}
+		<Sidebar {bookStore} />
+	{/if}
 	<main class="flex-1 overflow-auto scroll-smooth">
 		{@render children()}
 	</main>
