@@ -83,8 +83,8 @@
 
 ### Wiring
 
-- [ ] Load user's budget books in `(app)/+layout.server.ts` and pass to layout
-- [ ] Replace placeholder book entries and `#` links with database-backed navigation to a selected book
+- [x] Load user's budget books in `(app)/+layout.server.ts` and pass to layout
+- [x] Replace placeholder book entries and `#` links with database-backed navigation to a selected book
 - [ ] Point `SidebarUserAvatar` at `/settings/profile` — the account nav button deep-links to the Profile tab inside Settings. `SidebarSettingsLink` keeps opening `/settings`, which defaults to Category Library.
 
 ---

@@ -1,11 +1,25 @@
 <script lang="ts">
+	import { page } from '$app/state';
 	import Sidebar from '@/components/sidebar/Sidebar.svelte';
-	import { SAMPLE_BOOKS } from '@/data/sample-books';
 	import { createBudgetBookStore, setBudgetBookStore } from '@/stores/budget-books.svelte';
 
-	let { children } = $props();
+	let { children, data } = $props();
 
-	const bookStore = setBudgetBookStore(createBudgetBookStore(SAMPLE_BOOKS));
+	const bookStore = setBudgetBookStore(createBudgetBookStore(data.books));
+
+	$effect(() => {
+		try {
+			bookStore.setBooks(data.books ?? []);
+		} catch (error) {
+			console.error('Failed to sync books into store', { books: data.books, error });
+			throw error;
+		}
+	});
+
+	$effect(() => {
+		const bookId = page.params.bookId;
+		bookStore.selectBook(typeof bookId === 'string' ? bookId : null);
+	});
 </script>
 
 <div class="flex h-screen">

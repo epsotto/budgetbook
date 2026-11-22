@@ -11,15 +11,27 @@
 	let {
 		bookId,
 		bookName,
-		view = 'month'
-	}: { bookId: string; bookName: string; view?: string } = $props();
+		view = 'month',
+		initialCategories,
+		initialMerchantList
+	}: {
+		bookId: string;
+		bookName: string;
+		view?: string;
+		initialCategories?: Category[];
+		initialMerchantList?: Merchant[];
+	} = $props();
 
 	// The dashboard is keyed by bookId in the page, so a new instance is created on
-	// every book switch. Read the prop untracked to make that one-time snapshot explicit.
-	const sampleData = untrack(() => getSampleBookData(bookId));
+	// every book switch. Read the props untracked to make that one-time snapshot explicit.
+	const fallbackData = untrack(() =>
+		initialCategories && initialMerchantList ? null : getSampleBookData(bookId)
+	);
 	let headerHeight = $state(0);
-	let categories = $state<Category[]>(sampleData.categories);
-	let merchantList = $state<Merchant[]>(sampleData.merchantList);
+	let categories = $state<Category[]>(untrack(() => initialCategories ?? fallbackData!.categories));
+	let merchantList = $state<Merchant[]>(
+		untrack(() => initialMerchantList ?? fallbackData!.merchantList)
+	);
 
 	function handleTransactionAdded(merchantId: string, transaction: TransactionItem) {
 		merchantList = merchantList.map((merchant) =>

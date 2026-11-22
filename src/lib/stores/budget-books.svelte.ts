@@ -1,57 +1,62 @@
-import { getContext, setContext } from 'svelte';
+import { getContext, setContext, untrack } from 'svelte';
 import type { BudgetBook } from '@/types/Books/budget-book';
 
 const BUDGET_BOOKS_CONTEXT = Symbol('budget-books');
 
 /**
- * Creates the in-memory budget book store.
- *
- * This is intentionally backed by sample data for now. When the backend is
- * ready, swap the mutation functions for form actions or API calls while
- * keeping the same shape so components do not need to change.
+ * Client-side cache of the books returned by `(app)/+layout.server.ts`.
+ * Mutations go through SvelteKit form actions; the layout load re-runs and
+ * syncs this store via `setBooks`.
  */
 export function createBudgetBookStore(initialBooks: BudgetBook[]) {
-	let books = $state<BudgetBook[]>(initialBooks.map((book) => ({ ...book })));
-	let activeBookId = $state<string | null>(initialBooks[0]?.bookId ?? null);
+	function normalizeBooks(input: unknown): BudgetBook[] {
+		if (!Array.isArray(input)) return [];
+		return input
+			.filter(
+				(book): book is BudgetBook =>
+					Boolean(book && typeof book === 'object' && 'bookId' in book && book.bookId)
+			)
+			.map((book) => ({ ...book }));
+	}
 
-	function selectBook(bookId: string) {
-		if (books.some((book) => book.bookId === bookId)) {
-			activeBookId = bookId;
+	function sameBooks(a: BudgetBook[], b: BudgetBook[]) {
+		if (a === b) return true;
+		if (a.length !== b.length) return false;
+		for (let i = 0; i < a.length; i += 1) {
+			if (a[i].bookId !== b[i].bookId || a[i].name !== b[i].name || a[i].role !== b[i].role) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	let books = $state<BudgetBook[]>(normalizeBooks(initialBooks));
+	let activeBookId = $state<string | null>(null);
+
+	function setBooks(nextBooks: BudgetBook[]) {
+		const normalized = normalizeBooks(nextBooks);
+		const currentBooks = untrack(() => books);
+		if (!sameBooks(currentBooks, normalized)) {
+			books = normalized;
+		}
+
+		const currentActiveBookId = untrack(() => activeBookId);
+		if (
+			currentActiveBookId &&
+			!normalized.some((book) => book.bookId === currentActiveBookId)
+		) {
+			activeBookId = null;
 		}
 	}
 
-	function addBook(name: string) {
-		const trimmedName = name.trim();
-		if (!trimmedName) return null;
-
-		const book: BudgetBook = {
-			bookId: crypto.randomUUID(),
-			name: trimmedName
-		};
-
-		books = [...books, book];
-		activeBookId = book.bookId;
-		return book;
-	}
-
-	function renameBook(bookId: string, name: string) {
-		const trimmedName = name.trim();
-		if (!trimmedName) return;
-
-		books = books.map((book) => (book.bookId === bookId ? { ...book, name: trimmedName } : book));
-	}
-
-	function deleteBook(bookId: string) {
-		const deletedIndex = books.findIndex((book) => book.bookId === bookId);
-		if (deletedIndex === -1) return;
-
-		books = books.filter((book) => book.bookId !== bookId);
-
-		if (activeBookId !== bookId) return;
-
-		// Prefer the next book, then the previous one, and finally no selection.
-		const nextBook = books[deletedIndex] ?? books[deletedIndex - 1] ?? null;
-		activeBookId = nextBook?.bookId ?? null;
+	function selectBook(bookId: string | null) {
+		if (bookId === null) {
+			activeBookId = null;
+			return;
+		}
+		if (books.some((book) => book.bookId === bookId)) {
+			activeBookId = bookId;
+		}
 	}
 
 	return {
@@ -64,10 +69,8 @@ export function createBudgetBookStore(initialBooks: BudgetBook[]) {
 		get activeBook() {
 			return books.find((book) => book.bookId === activeBookId) ?? null;
 		},
-		selectBook,
-		addBook,
-		renameBook,
-		deleteBook
+		setBooks,
+		selectBook
 	};
 }
 
