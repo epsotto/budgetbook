@@ -2,7 +2,7 @@
 
 > Current status overview: [PROGRESS.md](PROGRESS.md). Reference: [PLANNING.md](PLANNING.md) · Mocks: `mocks/dashboard_screen.png`, `mocks/yearly_view_screen.png`, `mocks/transaction_drawer_screen.png`, `mocks/html mocks/settings_page.html`
 
-> **Status snapshot (2026-11-22):** Milestones 0–2 complete. Milestones 3–6 have their UI built but still run on in-memory sample data — the server layer is the critical path. Milestone 7 has its navigation shell built; the tabs are placeholders. Milestones 8–10 not started. Details in [PROGRESS.md](PROGRESS.md).
+> **Status snapshot (2026-11-22):** Milestones 0–2 complete. Milestones 3–6 have their UI built but still run on in-memory sample data — the server layer is the critical path. Milestone 7 has its navigation shell plus the Category Library UI (toolbar, cards, create/edit sheet, and budget rules), all backed by in-memory sample data; the other tabs remain placeholders. Milestones 8–10 not started. Details in [PROGRESS.md](PROGRESS.md).
 
 ---
 
@@ -222,6 +222,7 @@
 ### Server-Side Implementation
 
 - [ ] Create `src/routes/(app)/settings/+layout.server.ts` — load the user, the `userSetting` row, books (including archived), and the active book. Return typed `LayoutData`.
+- [ ] Create `src/routes/(app)/settings/categories/+page.server.ts` — load categories for the selected book and replace `SAMPLE_CATEGORY_LIBRARY`; keep the toolbar's book/search/archived state driven by server data once actions land.
 - [ ] `src/routes/(app)/settings/profile/+page.server.ts`
   - [ ] `updateProfile` — first/last name, email (Better Auth change-email flow)
   - [ ] `changePassword`
@@ -246,9 +247,9 @@
 - [x] Suppress the app sidebar on `/settings/*` so the settings rail does not nest inside it.
 - [x] `/profile` redirects to `/settings/profile`; the placeholder page is removed.
 - [ ] **Profile tab** — name/email/password forms, session list with "sign out other devices", data export, delete-account dialog in a visually separated danger zone (tonal separation, not a 1px border, per `DESIGN.md`).
-- [ ] **Category Library tab** — book selector at the top (defaults to the active book); category grid per the mock; create/edit sheet with name, Lucide icon, preset color swatch, and monthly cap; archive/restore; "Show archived" toggle.
-- [ ] **Category Library — Budget rules** — period start day, carryover toggle, starting balance. Book-level, but grouped here because this is the book-scoped tab.
-- [ ] **Color choice** — roughly eight preset swatches mapped to contrast-safe icon/background pairs in light and dark. No free-form hex picker: it breaks the tonal palette and produces unreadable icons.
+- [x] **Category Library tab** — book selector at the top (defaults to the active book); category grid per the mock; create/edit sheet with name, Lucide icon, preset color swatch, description, and monthly cap; archive/restore; delete confirmation; "Show archived" toggle. UI-only: reads and mutates `SAMPLE_CATEGORY_LIBRARY` in memory, so changes are lost on reload.
+- [x] **Category Library — Budget rules** — period start day, carryover toggle, starting balance. Book-level, but grouped here because this is the book-scoped tab. Owner-only inputs are disabled for other roles; values are local preview state.
+- [x] **Color choice** — eight preset swatches (`src/lib/settings/category-colors.ts`) mapped to contrast-safe icon/background pairs in light and dark. No free-form hex picker: it breaks the tonal palette and produces unreadable icons. Schema support for storing the palette key is still pending.
 - [ ] **Localisation tab** — currency, region (sets defaults), timezone, date format, 12/24h time, number format with a live preview, week start, theme, density. Theme and density sit here for now so we avoid a fifth tab; split into Appearance if this section grows.
 - [ ] **Language** — English only, shown read-only. No language dropdown until translations exist.
 - [ ] **Notifications tab** — email channel, digest frequency, over-budget / approaching-budget / weekly-summary toggles. Leave per-category granularity and quiet hours out until delivery works.

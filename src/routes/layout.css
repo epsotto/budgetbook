@@ -64,6 +64,10 @@
 	--total-row-foreground: oklch(0.985 0 0);
 	--category-orange: oklch(0.702 0.195 47.6);
 	--category-blue: oklch(0.6522 0.1568 242.71);
+	--category-violet: oklch(0.58 0.19 300);
+	--category-rose: oklch(0.62 0.19 15);
+	--category-teal: oklch(0.65 0.12 200);
+	--category-slate: oklch(0.52 0.03 250);
 	--chart-1: oklch(0.702 0.195 47.6);
 	--chart-2: oklch(0.6522 0.1568 242.71);
 	--chart-3: oklch(0.658 0.1235 175.54);
@@ -123,6 +127,10 @@
 	--total-row-foreground: oklch(0.985 0 0);
 	--category-orange: oklch(0.702 0.195 47.6);
 	--category-blue: oklch(0.623 0.214 259.8);
+	--category-violet: oklch(0.72 0.16 300);
+	--category-rose: oklch(0.72 0.16 15);
+	--category-teal: oklch(0.75 0.11 200);
+	--category-slate: oklch(0.72 0.03 250);
 	--chart-1: oklch(0.702 0.195 47.6);
 	--chart-2: oklch(0.623 0.214 259.8);
 	--chart-3: oklch(0.723 0.219 149.6);
@@ -170,6 +178,10 @@
 	--color-total-row-foreground: var(--total-row-foreground);
 	--color-category-orange: var(--category-orange);
 	--color-category-blue: var(--category-blue);
+	--color-category-violet: var(--category-violet);
+	--color-category-rose: var(--category-rose);
+	--color-category-teal: var(--category-teal);
+	--color-category-slate: var(--category-slate);
 	--color-chart-1: var(--chart-1);
 	--color-chart-2: var(--chart-2);
 	--color-chart-3: var(--chart-3);

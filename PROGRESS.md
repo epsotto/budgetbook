@@ -8,22 +8,23 @@
 - **Nothing is persisted.** The dashboard, sidebar books, and transactions all read from in-memory sample data (`src/lib/data/sample-*`, `src/lib/stores/budget-books.svelte.ts`). The database tables exist but are empty.
 - **Only two server actions exist**: `login` and `signup`. Every create/edit/delete in the app is client-side only.
 - **The critical path is the server layer**: a `[bookId]` route, load functions, and form actions. Milestones 4–6 are all blocked on this.
+- **The Category Library UI shell is built** in Settings: toolbar, category cards, create/edit sheet, archive/delete actions, and book budget rules. It runs on in-memory sample data and is lost on reload.
 
 ## Milestone status
 
-| #   | Milestone                 | Status                | Notes                                                                                                                                                     |
-| --- | ------------------------- | --------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 0   | Environment & Better Auth | ✅ Complete           | `.env`, generated auth schema, DB push, session guard all working. Optional Google OAuth not configured.                                                  |
-| 1   | Database schema           | ✅ Complete           | All app tables exist and are pushed to Postgres. Some naming differs from TASKS.md (see below).                                                           |
-| 2   | Route & layout shell      | ✅ Complete           | `(landing)` + `(app)` groups with a session guard.                                                                                                        |
-| 3   | Sidebar                   | 🟡 UI done, not wired | All six components built. Book list is driven by `SAMPLE_BOOKS`; shared list is hardcoded; every link points at `/dashboard`.                             |
-| 4   | Month dashboard           | 🟡 UI done, no server | `Dashboard.svelte` renders month/year and is mounted at `/dashboard`. No `[bookId]` route; `dashboard/+page.server.ts` is empty. Share button is a no-op. |
-| 5   | Transaction drawer        | 🟡 UI done, no server | Add, edit, and delete work in-memory. No form actions, so changes are lost on reload.                                                                     |
-| 6   | Year view                 | 🟡 UI done, no server | Full spreadsheet layout, CSV export, client-side add category/item. No year load/aggregation and no `createCategory`/`createItem` actions.                |
-| 7   | Settings page             | 🟡 Shell built        | Rail, nested routes, redirects, and sidebar suppression are in. Tabs are placeholders; no `userSetting` table or actions yet.                             |
-| 8   | Login polish              | 🟡 Partial            | Login is a styled centered card. Missing: logo/wordmark, Google toggle, redirect-to-last-book.                                                            |
-| 9   | Onboarding                | 🔴 Not started        | No new-user detection, no `createBudgetBook` action, no `/new` route.                                                                                     |
-| 10  | Collaboration             | ⏸ Deferred            | No share modal, invites, or role enforcement.                                                                                                             |
+| #   | Milestone                 | Status                 | Notes                                                                                                                                                          |
+| --- | ------------------------- | ---------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 0   | Environment & Better Auth | ✅ Complete            | `.env`, generated auth schema, DB push, session guard all working. Optional Google OAuth not configured.                                                       |
+| 1   | Database schema           | ✅ Complete            | All app tables exist and are pushed to Postgres. Some naming differs from TASKS.md (see below).                                                                |
+| 2   | Route & layout shell      | ✅ Complete            | `(landing)` + `(app)` groups with a session guard.                                                                                                             |
+| 3   | Sidebar                   | 🟡 UI done, not wired  | All six components built. Book list is driven by `SAMPLE_BOOKS`; shared list is hardcoded; every link points at `/dashboard`.                                  |
+| 4   | Month dashboard           | 🟡 UI done, no server  | `Dashboard.svelte` renders month/year and is mounted at `/dashboard`. No `[bookId]` route; `dashboard/+page.server.ts` is empty. Share button is a no-op.      |
+| 5   | Transaction drawer        | 🟡 UI done, no server  | Add, edit, and delete work in-memory. No form actions, so changes are lost on reload.                                                                          |
+| 6   | Year view                 | 🟡 UI done, no server  | Full spreadsheet layout, CSV export, client-side add category/item. No year load/aggregation and no `createCategory`/`createItem` actions.                     |
+| 7   | Settings page             | 🟡 Shell + category UI | Rail, nested routes, redirects, sidebar suppression, and the Category Library UI are in. Other tabs are placeholders; category data/actions are not persisted. |
+| 8   | Login polish              | 🟡 Partial             | Login is a styled centered card. Missing: logo/wordmark, Google toggle, redirect-to-last-book.                                                                 |
+| 9   | Onboarding                | 🔴 Not started         | No new-user detection, no `createBudgetBook` action, no `/new` route.                                                                                          |
+| 10  | Collaboration             | ⏸ Deferred             | No share modal, invites, or role enforcement.                                                                                                                  |
 
 Legend: ✅ complete · 🟡 partial · 🔴 not started · ⏸ deferred
 
@@ -36,6 +37,7 @@ Legend: ✅ complete · 🟡 partial · 🔴 not started · ⏸ deferred
 - Year view: 12-month grid, category/item/entry/total rows, current-month highlight, CSV export.
 - Transaction drawer: view transactions, add, inline edit, delete with confirmation, discard-changes prompt.
 - Settings shell: `/settings` redirects to `/settings/categories`, the rail and breadcrumb work across all four tabs, `/profile` redirects to `/settings/profile`, and the app sidebar is hidden on `/settings/*`.
+- Category Library UI: book selector, name/icon search, show-archived toggle and active count, category cards with action menus, create/edit sheet with eight preset colours, archive/restore/delete, and owner-only budget rules. All state is in-memory (`SAMPLE_CATEGORY_LIBRARY`); nothing is saved.
 - `npm run check` → **0 errors, 6 warnings** (placeholder `href="#"` in `SidebarSharedList` and related).
 
 ## Known deviations from TASKS.md / schema
@@ -46,6 +48,7 @@ Legend: ✅ complete · 🟡 partial · 🔴 not started · ⏸ deferred
 - Login lives under `(landing)/login`, not `(auth)/login` (there is no `(auth)` group).
 - `PROGRESS.md` was referenced by TASKS.md but missing until this file was created.
 - `src/routes/(app)/profile/+page.svelte` is a placeholder not tracked by any milestone.
+- Category Library uses `SAMPLE_CATEGORY_LIBRARY` and the app's sample books; it has no `+page.server.ts` load or form actions yet. Category descriptions are a UI view-model field and are not in the database schema.
 
 ## Infrastructure state
 
@@ -63,7 +66,7 @@ Legend: ✅ complete · 🟡 partial · 🔴 not started · ⏸ deferred
 4. **Add category/item actions** — `createCategory`, `createItem` for both month and year views.
 5. **Wire the sidebar** — load books (owned + shared) in `(app)/+layout.server.ts`, replace `SAMPLE_BOOKS`, and link to `/<bookId>`.
 6. **Onboarding** — `createBudgetBook` action, new-user detection, redirect to the new book.
-7. **Settings** — fill in the tab content: add `userSetting`, then implement account/book/category actions.
+7. **Settings** — replace the Category Library's in-memory data with a `+page.server.ts` load and actions (`createCategory`, `updateCategory`, `archiveCategory`/`restoreCategory`, `updateBookBudgetRules`), add `category.color`/`isArchived`, then fill in the remaining tabs starting with `userSetting`.
 8. **Polish** — loading/empty/error states, focus trap, mobile layout, tests.
 
 ## Verification
