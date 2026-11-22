@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { Settings } from '@lucide/svelte';
 	import { page } from '$app/state';
+	import { resolve } from '$app/paths';
 </script>
 
 <div
@@ -10,7 +11,7 @@
 		? 'bg-accent text-accent-foreground'
 		: 'text-muted-foreground'}"
 >
-	<a href="/settings" class="flex items-center gap-2.5 rounded-md px-2 py-1.5 text-sm">
+	<a href={resolve('/settings')} class="flex items-center gap-2.5 rounded-md px-2 py-1.5 text-sm">
 		<Settings class="size-4 shrink-0" />
 		Settings
 	</a>

@@ -2,7 +2,7 @@
 
 > Current status overview: [PROGRESS.md](PROGRESS.md). Reference: [PLANNING.md](PLANNING.md) · Mocks: `mocks/dashboard_screen.png`, `mocks/yearly_view_screen.png`, `mocks/transaction_drawer_screen.png`, `mocks/html mocks/settings_page.html`
 
-> **Status snapshot (2026-11-13):** Milestones 0–2 complete. Milestones 3–6 have their UI built but still run on in-memory sample data — the server layer is the critical path. Milestones 7–10 not started. Details in [PROGRESS.md](PROGRESS.md).
+> **Status snapshot (2026-11-22):** Milestones 0–2 complete. Milestones 3–6 have their UI built but still run on in-memory sample data — the server layer is the critical path. Milestone 7 has its navigation shell built; the tabs are placeholders. Milestones 8–10 not started. Details in [PROGRESS.md](PROGRESS.md).
 
 ---
 
@@ -85,7 +85,7 @@
 
 - [x] Load user's budget books in `(app)/+layout.server.ts` and pass to layout
 - [x] Replace placeholder book entries and `#` links with database-backed navigation to a selected book
-- [ ] Point `SidebarUserAvatar` at `/settings/profile` — the account nav button deep-links to the Profile tab inside Settings. `SidebarSettingsLink` keeps opening `/settings`, which defaults to Category Library.
+- [x] Point `SidebarUserAvatar` at `/settings/profile` — the account nav button deep-links to the Profile tab inside Settings. `SidebarSettingsLink` keeps opening `/settings`, which defaults to Category Library.
 
 ---
 
@@ -241,9 +241,10 @@
 
 ### User Interface Layout
 
-- [ ] `src/routes/(app)/settings/+layout.svelte` — the mock's rail, active states, and `SETTINGS / <TAB>` breadcrumb.
-- [ ] `src/routes/(app)/settings/+page.svelte` — redirect to `/settings/categories`.
-- [ ] Suppress the app sidebar on `/settings/*` so the settings rail does not nest inside it.
+- [x] `src/routes/(app)/settings/+layout.svelte` — the mock's rail, active states, and `SETTINGS / <TAB>` breadcrumb.
+- [x] `src/routes/(app)/settings/+page.server.ts` — redirect to `/settings/categories`.
+- [x] Suppress the app sidebar on `/settings/*` so the settings rail does not nest inside it.
+- [x] `/profile` redirects to `/settings/profile`; the placeholder page is removed.
 - [ ] **Profile tab** — name/email/password forms, session list with "sign out other devices", data export, delete-account dialog in a visually separated danger zone (tonal separation, not a 1px border, per `DESIGN.md`).
 - [ ] **Category Library tab** — book selector at the top (defaults to the active book); category grid per the mock; create/edit sheet with name, Lucide icon, preset color swatch, and monthly cap; archive/restore; "Show archived" toggle.
 - [ ] **Category Library — Budget rules** — period start day, carryover toggle, starting balance. Book-level, but grouped here because this is the book-scoped tab.
