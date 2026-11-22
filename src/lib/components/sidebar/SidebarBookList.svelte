@@ -1,26 +1,15 @@
 <script lang="ts">
 	import { AlertDialog } from 'bits-ui';
-	import { goto } from '$app/navigation';
+	import { enhance } from '$app/forms';
+	import { goto, invalidateAll } from '$app/navigation';
 	import { resolve } from '$app/paths';
+	import { page } from '$app/state';
 	import { Check, Pencil, Plus, Trash2, X } from '@lucide/svelte';
 	import { Button } from '@/components/ui/button';
 	import type { BudgetBook } from '@/types/Books/budget-book';
+	import type { BookFormResult } from '@/types/Books/budget-book-form';
 
-	let {
-		books,
-		activeBookId,
-		onBookSelected,
-		onBookAdded,
-		onBookUpdated,
-		onBookDeleted
-	}: {
-		books: BudgetBook[];
-		activeBookId: string | null;
-		onBookSelected: (bookId: string) => void;
-		onBookAdded: (name: string) => void;
-		onBookUpdated: (bookId: string, name: string) => void;
-		onBookDeleted: (bookId: string) => void;
-	} = $props();
+	let { books, activeBookId }: { books: BudgetBook[]; activeBookId: string | null } = $props();
 
 	let isAdding = $state(false);
 	let newBookName = $state('');
@@ -29,6 +18,8 @@
 	let showDeleteDialog = $state(false);
 	let newBookInput = $state<HTMLInputElement | null>(null);
 	let editingBookInput = $state<HTMLInputElement | null>(null);
+
+	const bookForm = $derived(page.form as BookFormResult | null);
 
 	$effect(() => {
 		if (isAdding) newBookInput?.focus();
@@ -51,23 +42,6 @@
 		isAdding = false;
 	}
 
-	function handleAddBook() {
-		const name = newBookName.trim();
-		if (!name) return;
-
-		onBookAdded(name);
-		newBookName = '';
-		isAdding = false;
-		goto(resolve('/dashboard'));
-	}
-
-	function handleSelectBook(bookId: string) {
-		showDeleteDialog = false;
-		handleCancelAdding();
-		handleCancelEditing();
-		onBookSelected(bookId);
-	}
-
 	function handleStartEditing(book: BudgetBook) {
 		showDeleteDialog = false;
 		isAdding = false;
@@ -81,17 +55,8 @@
 		editingBookName = '';
 	}
 
-	function handleUpdateBook() {
-		const name = editingBookName.trim();
-		if (!editingBookId || !name) return;
-
-		onBookUpdated(editingBookId, name);
-		handleCancelEditing();
-	}
-
 	function handleDeleteRequest() {
 		if (!editingBookId) return;
-
 		showDeleteDialog = true;
 	}
 
@@ -99,23 +64,17 @@
 		showDeleteDialog = false;
 	}
 
-	function handleConfirmDelete() {
-		if (!editingBookId) return;
-
-		onBookDeleted(editingBookId);
-		showDeleteDialog = false;
-		handleCancelEditing();
+	function handleAddKeydown(event: KeyboardEvent) {
+		if (event.key === 'Escape') {
+			event.preventDefault();
+			handleCancelAdding();
+		}
 	}
 
-	function handleKeydown(event: KeyboardEvent, action: 'add' | 'edit') {
-		if (event.key === 'Enter') {
+	function handleEditKeydown(event: KeyboardEvent) {
+		if (event.key === 'Escape') {
 			event.preventDefault();
-			if (action === 'add') handleAddBook();
-			else handleUpdateBook();
-		} else if (event.key === 'Escape') {
-			event.preventDefault();
-			if (action === 'add') handleCancelAdding();
-			else handleCancelEditing();
+			handleCancelEditing();
 		}
 	}
 
@@ -136,6 +95,16 @@
 
 		links[nextIndex]?.focus();
 	}
+
+	const createError = $derived(
+		bookForm?.action === 'createBook' && !bookForm.success ? (bookForm.message ?? null) : null
+	);
+	const renameError = $derived(
+		bookForm?.action === 'renameBook' && !bookForm.success ? (bookForm.message ?? null) : null
+	);
+	const deleteError = $derived(
+		bookForm?.action === 'deleteBook' && !bookForm.success ? (bookForm.message ?? null) : null
+	);
 </script>
 
 <div class="flex flex-col gap-2 px-3 py-4">
@@ -154,49 +123,86 @@
 			<Plus />
 		</Button>
 	</div>
+
+	{#if createError && !isAdding}
+		<p class="px-2 text-xs text-destructive" role="status">{createError}</p>
+	{/if}
+	{#if renameError && !editingBookId}
+		<p class="px-2 text-xs text-destructive" role="status">{renameError}</p>
+	{/if}
+	{#if deleteError && !showDeleteDialog}
+		<p class="px-2 text-xs text-destructive" role="status">{deleteError}</p>
+	{/if}
+
 	<ul class="flex flex-col gap-1" aria-label="My budget books">
 		{#each books as book (book.bookId)}
 			{@const isActive = book.bookId === activeBookId}
 			<li>
 				{#if editingBookId === book.bookId}
-					<div class="flex items-center gap-1.5 rounded-md bg-accent/40 px-2 py-1">
-						<input
-							bind:this={editingBookInput}
-							type="text"
-							bind:value={editingBookName}
-							aria-label="Budget book name"
-							onkeydown={(event) => handleKeydown(event, 'edit')}
-							class="h-7 min-w-0 flex-1 rounded-md border border-border bg-background px-2 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-ring/30"
-						/>
-						<Button
-							size="icon-xs"
-							class="shrink-0 bg-success text-success-foreground hover:bg-success/90"
-							aria-label="Save budget book"
-							title="Save"
-							disabled={!editingBookName.trim()}
-							onclick={handleUpdateBook}
-						>
-							<Check />
-						</Button>
-						<Button
-							size="icon-xs"
-							class="shrink-0 bg-destructive text-destructive-foreground hover:bg-destructive/90"
-							aria-label="Cancel editing budget book"
-							title="Cancel"
-							onclick={handleCancelEditing}
-						>
-							<X />
-						</Button>
-						<Button
-							size="icon-xs"
-							class="shrink-0 bg-destructive text-destructive-foreground hover:bg-destructive/90"
-							aria-label="Delete budget book"
-							title="Delete"
-							onclick={handleDeleteRequest}
-						>
-							<Trash2 />
-						</Button>
-					</div>
+					<form
+						method="POST"
+						action="/dashboard?/renameBook"
+						class="flex flex-col gap-1.5 rounded-md bg-accent/40 px-2 py-1"
+						use:enhance={() => {
+							return async ({ result, update }) => {
+								if (result.type === 'success') {
+									editingBookId = null;
+									editingBookName = '';
+									await invalidateAll();
+									return;
+								}
+								await update();
+							};
+						}}
+					>
+						<input type="hidden" name="bookId" value={book.bookId} />
+						<div class="flex items-center gap-1.5">
+							<input
+								bind:this={editingBookInput}
+								type="text"
+								name="name"
+								bind:value={editingBookName}
+								aria-label="Budget book name"
+								maxlength={100}
+								required
+								onkeydown={handleEditKeydown}
+								class="h-7 min-w-0 flex-1 rounded-md border border-border bg-background px-2 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-ring/30"
+							/>
+							<Button
+								type="submit"
+								size="icon-xs"
+								class="shrink-0 bg-success text-success-foreground hover:bg-success/90"
+								aria-label="Save budget book"
+								title="Save"
+								disabled={!editingBookName.trim()}
+							>
+								<Check />
+							</Button>
+							<Button
+								type="button"
+								size="icon-xs"
+								class="shrink-0 bg-destructive text-destructive-foreground hover:bg-destructive/90"
+								aria-label="Cancel editing budget book"
+								title="Cancel"
+								onclick={handleCancelEditing}
+							>
+								<X />
+							</Button>
+							<Button
+								type="button"
+								size="icon-xs"
+								class="shrink-0 bg-destructive text-destructive-foreground hover:bg-destructive/90"
+								aria-label="Delete budget book"
+								title="Delete"
+								onclick={handleDeleteRequest}
+							>
+								<Trash2 />
+							</Button>
+						</div>
+						{#if renameError}
+							<p class="text-xs text-destructive" role="status">{renameError}</p>
+						{/if}
+					</form>
 				{:else}
 					<div
 						class="group flex items-center gap-2 rounded-md px-2 py-1.5 text-sm {isActive
@@ -204,10 +210,9 @@
 							: 'hover:bg-accent hover:text-accent-foreground'}"
 					>
 						<a
-							href={resolve('/dashboard')}
+							href={resolve(`/dashboard/${book.bookId}` as '/dashboard')}
 							aria-current={isActive ? 'page' : undefined}
 							data-book-link
-							onclick={() => handleSelectBook(book.bookId)}
 							onkeydown={handleBookListKeydown}
 							class="flex min-w-0 flex-1 items-center gap-2.5"
 						>
@@ -239,36 +244,64 @@
 		{/if}
 		{#if isAdding}
 			<li>
-				<div class="flex items-center gap-1.5 rounded-md bg-accent/40 px-2 py-1">
-					<input
-						bind:this={newBookInput}
-						type="text"
-						bind:value={newBookName}
-						placeholder="Book name"
-						aria-label="New budget book name"
-						onkeydown={(event) => handleKeydown(event, 'add')}
-						class="h-7 min-w-0 flex-1 rounded-md border border-border bg-background px-2 text-sm outline-none placeholder:text-muted-foreground focus:border-primary focus:ring-2 focus:ring-ring/30"
-					/>
-					<Button
-						size="icon-xs"
-						class="shrink-0 bg-success text-success-foreground hover:bg-success/90"
-						aria-label="Save budget book"
-						title="Save"
-						disabled={!newBookName.trim()}
-						onclick={handleAddBook}
-					>
-						<Check />
-					</Button>
-					<Button
-						size="icon-xs"
-						class="shrink-0 bg-destructive text-destructive-foreground hover:bg-destructive/90"
-						aria-label="Cancel adding budget book"
-						title="Cancel"
-						onclick={handleCancelAdding}
-					>
-						<X />
-					</Button>
-				</div>
+				<form
+					method="POST"
+					action="/dashboard?/createBook"
+					class="flex flex-col gap-1.5 rounded-md bg-accent/40 px-2 py-1"
+					use:enhance={() => {
+						return async ({ result, update }) => {
+							if (result.type === 'success') {
+								const data = result.data as (BookFormResult & { bookId?: string }) | undefined;
+								newBookName = '';
+								isAdding = false;
+								await invalidateAll();
+								if (data?.bookId) {
+									await goto(resolve(`/dashboard/${data.bookId}` as '/dashboard'));
+								}
+								return;
+							}
+							await update();
+						};
+					}}
+				>
+					<div class="flex items-center gap-1.5">
+						<input
+							bind:this={newBookInput}
+							type="text"
+							name="name"
+							bind:value={newBookName}
+							placeholder="Book name"
+							aria-label="New budget book name"
+							maxlength={100}
+							required
+							onkeydown={handleAddKeydown}
+							class="h-7 min-w-0 flex-1 rounded-md border border-border bg-background px-2 text-sm outline-none placeholder:text-muted-foreground focus:border-primary focus:ring-2 focus:ring-ring/30"
+						/>
+						<Button
+							type="submit"
+							size="icon-xs"
+							class="shrink-0 bg-success text-success-foreground hover:bg-success/90"
+							aria-label="Save budget book"
+							title="Save"
+							disabled={!newBookName.trim()}
+						>
+							<Check />
+						</Button>
+						<Button
+							type="button"
+							size="icon-xs"
+							class="shrink-0 bg-destructive text-destructive-foreground hover:bg-destructive/90"
+							aria-label="Cancel adding budget book"
+							title="Cancel"
+							onclick={handleCancelAdding}
+						>
+							<X />
+						</Button>
+					</div>
+					{#if createError}
+						<p class="text-xs text-destructive" role="status">{createError}</p>
+					{/if}
+				</form>
 			</li>
 		{/if}
 	</ul>
@@ -288,15 +321,49 @@
 				<span class="font-medium text-foreground">&ldquo;{editingBookName}&rdquo;</span>
 				and everything inside it. This action cannot be undone.
 			</AlertDialog.Description>
+			{#if deleteError}
+				<p class="mt-3 text-sm text-destructive" role="status">{deleteError}</p>
+			{/if}
 			<div class="mt-6 flex flex-row justify-end gap-3">
 				<Button variant="outline" class="h-10" onclick={handleCancelDelete}>Cancel</Button>
-				<Button
-					variant="destructive"
-					class="h-10 bg-destructive text-destructive-foreground hover:bg-destructive/90"
-					onclick={handleConfirmDelete}
+				<form
+					method="POST"
+					action="/dashboard?/deleteBook"
+					use:enhance={() => {
+						return async ({ result, update }) => {
+							if (result.type === 'success') {
+								const data = result.data as
+									| (BookFormResult & { deletedBookId?: string; nextBookId?: string | null })
+									| undefined;
+								showDeleteDialog = false;
+								editingBookId = null;
+								editingBookName = '';
+								await invalidateAll();
+								const deletedId = data?.deletedBookId;
+								const currentBookId = page.params.bookId;
+								if (deletedId && currentBookId === deletedId) {
+									const next = data?.nextBookId;
+									if (next) {
+										await goto(resolve(`/dashboard/${next}` as '/dashboard'));
+									} else {
+										await goto(resolve('/dashboard'));
+									}
+								}
+								return;
+							}
+							await update();
+						};
+					}}
 				>
-					Delete
-				</Button>
+					<input type="hidden" name="bookId" value={editingBookId ?? ''} />
+					<Button
+						type="submit"
+						variant="destructive"
+						class="h-10 bg-destructive text-destructive-foreground hover:bg-destructive/90"
+					>
+						Delete
+					</Button>
+				</form>
 			</div>
 		</AlertDialog.Content>
 	</AlertDialog.Portal>

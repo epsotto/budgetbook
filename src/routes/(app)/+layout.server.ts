@@ -1,10 +1,15 @@
 import { redirect } from '@sveltejs/kit';
+import { listBooksForUser } from '$lib/server/books';
 
-// src/routes/(dashboard)/+layout.server.ts
 export const load = async (event) => {
-	// Because of hooks.server.ts, event.locals.user is automatically populated
 	if (!event.locals.user) {
 		throw redirect(302, '/login');
 	}
-	return { user: event.locals.user };
+
+	const books = await listBooksForUser(event.locals.user.id);
+
+	return {
+		user: event.locals.user,
+		books
+	};
 };

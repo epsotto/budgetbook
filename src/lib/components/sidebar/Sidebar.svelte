@@ -15,14 +15,7 @@
 		href={resolve('/dashboard')}
 		class="primary block px-3 py-4 text-lg font-bold tracking-wide hover:opacity-80">BudgetBook</a
 	>
-	<SidebarBookList
-		books={bookStore.books}
-		activeBookId={bookStore.activeBookId}
-		onBookSelected={bookStore.selectBook}
-		onBookAdded={bookStore.addBook}
-		onBookUpdated={bookStore.renameBook}
-		onBookDeleted={bookStore.deleteBook}
-	></SidebarBookList>
+	<SidebarBookList books={bookStore.books} activeBookId={bookStore.activeBookId} />
 	<SidebarSharedList></SidebarSharedList>
 	<div class="mt-auto">
 		<SidebarSettingsLink></SidebarSettingsLink>
